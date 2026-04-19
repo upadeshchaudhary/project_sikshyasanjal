@@ -135,8 +135,7 @@ export default function LoginPage() {
                  childId:"s1", childName:"Aarav Sharma", childClass:"10A" },
     };
     const user = DEMO_USERS_LOCAL[selectedRole];
-    const school = { name:"Shree Saraswati Secondary School", domain:"saraswati",
-                     address:"Kathmandu, Nepal", phone:"+977-1-4567890", estYear:2041 };
+    const school = { name:"SikshyaSanjal Academy", domain:"sikshyasanjal.com", address:"Kathmandu, Nepal", phone:"+977-1-4567890", estYear:2041 };
     login(user, school);
     toast.success(`Welcome, ${user.name}!`);
     navigate("/dashboard");

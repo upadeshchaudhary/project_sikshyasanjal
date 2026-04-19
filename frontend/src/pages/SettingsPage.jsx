@@ -145,7 +145,7 @@ function ProfileTab({ currentUser }) {
           <span className="tag tag-blue" style={{ textTransform: "capitalize" }}>{currentUser?.role}</span>
         </SettingRow>
         <SettingRow label="School">
-          <span style={{ fontSize: 13, color: "var(--text-2)" }}>{currentUser?.school || "Shree Saraswati Secondary School"}</span>
+          <span style={{ fontSize: 13, color: "var(--text-2)" }}>{currentUser?.school || "SikshyaSanjal Academy"}</span>
         </SettingRow>
       </Section>
     </>

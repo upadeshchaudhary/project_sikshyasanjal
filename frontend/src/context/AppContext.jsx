@@ -42,7 +42,7 @@ export const DEFAULT_SETTINGS = {
   sessionTimeout:     "30",
   defaultClass:       "10A",
   academicYear:       "2082-83",
-  schoolName:         "Shree Saraswati Secondary School",
+  schoolName:         "SikshyaSanjal Academy",
   schoolPhone:        "+977-1-4567890",
   schoolAddress:      "Kathmandu, Nepal",
   feeReminderDays:    "7",

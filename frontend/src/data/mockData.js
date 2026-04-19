@@ -2,8 +2,8 @@
 // The school name/address here represents WHATEVER school logs in.
 // Replace these values when connecting to a real backend.
 export const mockSchool = {
-  name:    "Shree Saraswati Secondary School",
-  domain:  "saraswati",
+  name:    "SikshyaSanjal Academy",
+  domain:  "sikshyasanjal.edu.np",
   address: "Kathmandu, Nepal",
   phone:   "+977-1-4567890",
   estYear: 2041,
