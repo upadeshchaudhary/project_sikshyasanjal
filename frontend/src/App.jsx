@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { AppProvider, useApp } from "./context/AppContext";
+import GoogleCallbackPage from "./pages/GoogleCallbackPage"; 
 import Sidebar from "./components/Sidebar";
 import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
@@ -62,7 +63,8 @@ function AppShell() {
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
           {/* ── All roles ─────────────────────────────────── */}
-          <Route path="/dashboard"  element={<DashboardPage />} />
+          <Route path="/dashboard"  element={<DashboardPage />} />  
+          <Route path="/auth/callback" element={<GoogleCallbackPage />} />
           <Route path="/homework"   element={<HomeworkPage />} />
           <Route path="/notices"    element={<NoticesPage />} />
           <Route path="/messages"   element={<MessagesPage />} />

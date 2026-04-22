@@ -22,6 +22,11 @@ export const DEFAULT_SETTINGS = {
   showPhone:          false,
   twoFactorOTP:       true,
   sessionTimeout:     "30",
+  schoolName:         "SikshyaSanjal Academy",
+  schoolPhone:        "+977-1-4567890",
+  schoolAddress:      "Kathmandu, Nepal",
+  feeReminderDays:    "7",
+  maxOTPAttempts:     "5",
 };
 
 // ─── Provider ─────────────────────────────────────────────────────────────────
