@@ -110,7 +110,7 @@ router.post("/login", async (req, res) => {
       email:  email.toLowerCase().trim(),
       school: school._id,
       role,
-    });
+    }).select("+passwordHash"); // Explicitly include passwordHash for verification
 
     // Use the same error message for "user not found" and "wrong password"
     // to prevent user enumeration attacks
@@ -164,7 +164,7 @@ router.post("/parent/send-otp", async (req, res) => {
     const school = await School.findOne({ domain: schoolDomain });
     if (!school) return res.status(404).json({ success: false, message: "School not found." });
 
-    const user = await User.findOne({ phone, school: school._id, role: "parent" });
+    const user = await User.findOne({ phone, school: school._id, role: "parent" }).select("+otpHash +otpExpiry"); // Include OTP fields for potential cleanup
     if (!user) {
       // Don't reveal whether the number is registered — prevents enumeration
       return res.status(200).json({
@@ -241,7 +241,7 @@ router.post("/parent/verify-otp", async (req, res) => {
     const school = await School.findOne({ domain: schoolDomain });
     if (!school) return res.status(404).json({ success: false, message: "School not found." });
 
-    const user = await User.findOne({ phone, school: school._id, role: "parent" });
+    const user = await User.findOne({ phone, school: school._id, role: "parent" }).select("+otpHash +otpExpiry"); // Include OTP fields for verification  
     if (!user || !user.otpHash) {
       return res.status(401).json({ success: false, message: "Invalid OTP. Please request a new one." });
     }
