@@ -263,7 +263,7 @@ This creates:
 - Sample teachers, students, and parents
 - Sample homework, notices, and attendance records
 
-> **Tip:** To wipe and re-seed, run: `node seeder/seed.js --reset`
+> **Tip:** To wipe and re-seed, run: `node seed.js --reset`
 
 ---
 
