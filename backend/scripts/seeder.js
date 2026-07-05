@@ -108,7 +108,7 @@ async function seed() {
     // 1. SCHOOL
     // ════════════════════════════════════════════════════════════════════════════
     const school = await School.create({
-      name:         "Saraswati Secondary School",
+      name:         "Saraswati Boarding School",
       address:      "Dharan-5, Sunsari, Koshi Province",
       phone:        "025520123",
       email:        "info@saraswati.edu.np",

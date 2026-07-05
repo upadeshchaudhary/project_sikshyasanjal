@@ -107,7 +107,7 @@ async function seed() {
   // 1. SCHOOL
   // ════════════════════════════════════════════════════════════════════════════
   const school = await School.create({
-    name:         "Saraswati Secondary School",
+    name:         "Saraswati Boarding School",
     domain:       "saraswati",
     address:      "Dharan-5, Sunsari, Koshi Province",
     phone:        "+977025520123",
@@ -690,7 +690,7 @@ async function seed() {
   console.log("\n" + "═".repeat(62));
   console.log("✅ SEEDING COMPLETE — SikshyaSanjal Demo Data");
   console.log("═".repeat(62));
-  console.log("\n🏫 School: Saraswati Secondary School");
+  console.log("\n🏫 School: Saraswati Boarding School");
   console.log("   Domain:  saraswati");
   console.log("   URL:     http://localhost:3000\n");
 
