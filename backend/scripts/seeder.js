@@ -1,15 +1,13 @@
 // backend/seeder.js
-// ════════════════════════════════════════════════════════════════════════════════
 // SikshyaSanjal Demo Data Seeder (Single-Tenant)
 // Run: node seeder.js           → seeds demo data
 // Run: node seeder.js --destroy → wipes all data and exits
-// ════════════════════════════════════════════════════════════════════════════════
+
 
 require("dotenv").config();
 const mongoose = require("mongoose");
 const bcrypt   = require("bcryptjs");
 
-// ── Models ───────────────────────────────────────────────────────────────────
 const School           = require("../models/SchoolSchema");
 const User             = require("../models/UserSchema");
 const Student          = require("../models/StudentSchema");
@@ -25,7 +23,6 @@ const { getCurrentAcademicYear } = require("../utils/calendar");
 
 const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017/sikshyasanjal";
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
 async function hash(password) {
   return bcrypt.hash(password, 12);
 }
@@ -38,7 +35,6 @@ function bsDate(year, month, day) {
   return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 }
 
-// ── Grade Calculator ──────────────────────────────────────────────────────────
 function calcGrade(pct) {
   if (pct >= 90) return { grade: "A+", gpa: 4.0 };
   if (pct >= 80) return { grade: "A",  gpa: 3.6 };
@@ -81,15 +77,11 @@ function buildSubjects(subjectList, seed = 1) {
   };
 }
 
-// ════════════════════════════════════════════════════════════════════════════════
-// MAIN SEEDER
-// ════════════════════════════════════════════════════════════════════════════════
 async function seed() {
   try {
     await mongoose.connect(MONGO_URI);
     console.log("✅ Connected to MongoDB");
-
-    // ── Wipe existing data ───────────────────────────────────────────────────────
+    
     const collections = [
       School, User, Student, Homework, Notice,
       Attendance, ExamResult, FeeRecord, Message,

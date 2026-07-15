@@ -1,9 +1,6 @@
 // backend/seeder.js
-// ════════════════════════════════════════════════════════════════════════════════
-// SikshyaSanjal Demo Data Seeder
 // Run: node seeder.js           → seeds demo data
 // Run: node seeder.js --destroy → wipes all data and exits
-// ════════════════════════════════════════════════════════════════════════════════
 
 require("dotenv").config();
 const mongoose = require("mongoose");

@@ -10,17 +10,14 @@ import {
   BookOpen, ChevronLeft, ChevronRight, Filter
 } from "lucide-react";
 
-// ── Constants ─────────────────────────────────────────────────────────────────
 const PRIORITIES = ["high", "medium", "low"];
 const PRIORITY_TAG = { high: "tag-red", medium: "tag-amber", low: "tag-green" };
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
 function Skeleton({ height = 16, width = "100%", radius = 6 }) {
   return <div className="skeleton" style={{ height, width, borderRadius: radius }} />;
 }
 
 function isDueSoon(dueDateBs) {
-  // Flag homework due within 3 days as "soon"
   if (!dueDateBs) return false;
   const [y, m, d] = dueDateBs.split("-").map(Number);
   const due = new Date(y - 57, m - 1, d); // rough AD conversion
@@ -28,7 +25,6 @@ function isDueSoon(dueDateBs) {
   return diff >= 0 && diff <= 3;
 }
 
-// ── Confirm delete modal ──────────────────────────────────────────────────────
 function ConfirmModal({ hw, onConfirm, onCancel }) {
   useEffect(() => {
     const h = (e) => { if (e.key === "Escape") onCancel(); };
@@ -99,12 +95,10 @@ function HomeworkModal({ hw, classes, onSave, onClose, saving }) {
   const set = (k, v) => {
     let updates = { [k]: v };
 
-    // Auto-sync AD and BS dates
     if (k === "dueDate") {
       const bs = adToBs(v);
       if (bs) updates.dueDateBs = bs;
     } else if (k === "dueDateBs") {
-      // Basic format check before converting: YYYY-MM-DD
       if (/^\d{4}-\d{2}-\d{2}$/.test(v)) {
         const ad = bsToAd(v);
         if (ad) updates.dueDate = ad;
@@ -112,8 +106,6 @@ function HomeworkModal({ hw, classes, onSave, onClose, saving }) {
     }
 
     setForm(p => ({ ...p, ...updates }));
-    
-    // Clear errors for fields being updated
     setErrors(p => {
       const next = { ...p };
       Object.keys(updates).forEach(key => delete next[key]);
@@ -387,9 +379,6 @@ function DetailModal({ hw, onClose }) {
   );
 }
 
-// ════════════════════════════════════════════════════════════════════════════════
-// MAIN PAGE
-// ════════════════════════════════════════════════════════════════════════════════
 export default function HomeworkPage() {
   const { currentUser } = useApp();
 

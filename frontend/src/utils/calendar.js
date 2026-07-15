@@ -14,8 +14,6 @@ export const BS_MONTH_NAMES_NP = [
   "पुष",   "माघ",  "फागुन", "चैत",
 ];
 
-// Days in each BS month per year
-// Source: official Nepal Calendar published by Bikram Sambat calendar authority
 const BS_DAYS = {
   2078: [31,31,32,32,31,30,30,29,30,29,30,30],
   2079: [31,31,32,31,31,31,30,29,30,29,30,30],
@@ -31,24 +29,21 @@ const BS_DAYS = {
 };
 
 const BS_EPOCH = { year: 2078, month: 1, day: 1 };
-const AD_EPOCH = new Date(2021, 3, 14); // April 14, 2021 (month is 0-indexed)
+const AD_EPOCH = new Date(2021, 3, 14); 
 
 /**
- * Returns the number of days in a given BS month
- * @param {number} year  - BS year (e.g. 2081)
- * @param {number} month - BS month 1-indexed (1=Baisakh, 12=Chaitra)
- * @returns {number} number of days
+ * Get number of days in a BS month
+ * @param {number} year  
+ * @param {number} month 
+ * @returns {number}
  */
 export function getDaysInBSMonth(year, month) {
   if (month < 1 || month > 12) return 30;
   const row = BS_DAYS[year];
-  if (!row) return 30; // fallback for years not in table
+  if (!row) return 30; 
   return row[month - 1];
 }
 
-/**
- * Get total days from BS epoch (1st Baisakh of reference year)
- */
 export function bsTotalDays(year, month, day) {
   let total = 0;
   for (let y = BS_EPOCH.year; y < year; y++) {
@@ -144,10 +139,8 @@ export function formatBsDate(bsDateString, nepali = false) {
   const monthName = names[(m - 1)] || "";
   return `${d} ${monthName} ${y} BS`;
 }
-
 /**
- * Get current BS date (approximate — use nepali-date library in production
- * for exact conversion. This is accurate within ±1 day for 2078-2087.)
+ * Get today's BS date
  * @returns {{ year, month, day }}
  */
 export function getTodayBS() {
@@ -156,13 +149,12 @@ export function getTodayBS() {
   const adMon  = now.getMonth() + 1;
   const adDay  = now.getDate();
 
-  // BS year is AD year + 56 before April 14, +57 from April 14 onwards
+
   const bsYear = (adMon > 4 || (adMon === 4 && adDay >= 14))
     ? adYear + 57
     : adYear + 56;
 
-  // Approximate BS month from AD month
-  // Baisakh starts ~April 13-14 → AD month 4 maps to BS month 1
+
   const adMonthToBs = [9, 10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8]; // index 0=Jan
   const bsMonth = adMonthToBs[adMon - 1];
 
@@ -227,7 +219,7 @@ export function validateBsDate(dateStr) {
  * Compare two BS date strings (format YYYY-MM-DD)
  * @param {string} d1
  * @param {string} d2
- * @returns {number} negative if d1 < d2, 0 if equal, positive if d1 > d2
+ * @returns {number} 
  */
 export function compareBsDates(d1, d2) {
   if (!d1 || !d2) return 0;

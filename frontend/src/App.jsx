@@ -38,7 +38,6 @@ function AppShell() {
     );
   }
 
-  // Not logged in → only the login route and landing page are accessible
   if (!currentUser) {
     return (
       <Routes>
@@ -49,7 +48,6 @@ function AppShell() {
     );
   }
 
-  // Logged in → show full app shell with role-guarded routes
   const { settings } = useApp();
   
   return (
@@ -121,7 +119,6 @@ function AppShell() {
   );
 }
 
-// ─── Root ─────────────────────────────────────────────────────────────────────
 export default function App() {
   return (
     <>

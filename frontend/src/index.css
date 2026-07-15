@@ -1,34 +1,29 @@
-/* ════════════════════════════════════════════════════════════════
-   SIKSHYASANJAL — Global Stylesheet
-   Stack: React 18 · Sora · DM Serif Display · JetBrains Mono
-════════════════════════════════════════════════════════════════ */
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ── Design Tokens ─────────────────────────────────────────── */
 :root {
-  /* Brand */
+
   --blue:        #1E3FF2;
   --blue-light:  #4060FF;
   --blue-pale:   #EEF1FE;
   --teal:        #0BBCAC;
   --teal-pale:   #E0FAF7;
 
-  /* Backgrounds */
+
   --canvas:      #F4F6FB;
   --card:        #FFFFFF;
-  --sidebar-bg:  #111827;   /* dedicated sidebar token — not var(--text) */
+  --sidebar-bg:  #111827;
 
-  /* Borders */
+
   --border:      #E5E9F2;
   --border-mid:  #D1D8E8;
 
-  /* Text */
+
   --text:        #1A1D2E;
   --text-2:      #5A6080;
   --text-3:      #9AA0BC;
 
-  /* Semantic colors */
+
   --green:       #22C55E;
   --green-pale:  #DCFCE7;
   --red:         #EF4444;
@@ -40,21 +35,21 @@
   --pink:        #EC4899;
   --pink-pale:   #FCE7F3;
 
-  /* Layout */
+
   --sidebar-w:   240px;
   --topbar-h:    60px;
   --radius:      12px;
   --radius-sm:   8px;
   --radius-lg:   18px;
 
-  /* Shadows */
+
   --shadow:      0 4px 20px rgba(0,0,0,0.06);
   --shadow-md:   0 6px 24px rgba(0,0,0,0.09);
   --shadow-lg:   0 8px 32px rgba(0,0,0,0.12);
   --shadow-blue: 0 6px 20px rgba(30,63,242,0.28);
 }
 
-/* ── Dark Mode ─────────────────────────────────────────────── */
+
 body.dark {
   --canvas:      #0F1117;
   --card:        #1A1D2E;
@@ -76,7 +71,7 @@ body.dark {
   --shadow-lg:   0 8px 32px rgba(0,0,0,0.65);
 }
 
-/* Dark sidebar overrides */
+
 body.dark .sidebar              { background: var(--sidebar-bg); border-right-color: rgba(255,255,255,0.06); }
 body.dark .sidebar-logo         { border-bottom-color: rgba(255,255,255,0.06); }
 body.dark .sidebar-footer       { border-top-color: rgba(255,255,255,0.06); }
@@ -98,7 +93,7 @@ body.dark .tag-blue             { color: #818CF8; }
 body.dark .tag-purple           { color: #C084FC; }
 body.dark .tag-gray             { background: #252838; color: var(--text-2); }
 
-/* ── Base ──────────────────────────────────────────────────── */
+
 html, body {
   height: 100%;
   font-family: 'Sora', sans-serif;
@@ -115,7 +110,7 @@ h1, h2, h3 { font-family: 'DM Serif Display', serif; letter-spacing: -0.02em; }
 h4, h5, h6 { font-family: 'Sora', sans-serif; font-weight: 600; }
 .mono      { font-family: 'JetBrains Mono', monospace; }
 
-/* ── App Shell Layout ──────────────────────────────────────── */
+
 .app-shell {
   display: flex;
   height: 100vh;
@@ -127,7 +122,7 @@ h4, h5, h6 { font-family: 'Sora', sans-serif; font-weight: 600; }
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  min-width: 0;   /* prevents flex overflow */
+  min-width: 0;
 }
 
 .page-content {
@@ -136,7 +131,7 @@ h4, h5, h6 { font-family: 'Sora', sans-serif; font-weight: 600; }
   padding: 28px;
 }
 
-/* ── Sidebar ───────────────────────────────────────────────── */
+
 .sidebar {
   width: var(--sidebar-w);
   background: var(--sidebar-bg);
@@ -151,13 +146,11 @@ h4, h5, h6 { font-family: 'Sora', sans-serif; font-weight: 600; }
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ── Collapsed state: icon-only rail (desktop only) ─────────── */
+
 .app-shell.sidebar-collapsed .sidebar {
   width: 64px;
-  /* keep border-right visible */
 }
 
-/* Remove the old width:0 / opacity:0 rules — collapse is now 64px */
 
 .sidebar-logo {
   padding: 18px 16px 14px;
@@ -208,7 +201,6 @@ h4, h5, h6 { font-family: 'Sora', sans-serif; font-weight: 600; }
   font-weight: 600;
 }
 
-/* Left accent bar on active item */
 .nav-item.active::before {
   content: '';
   position: absolute;
@@ -228,29 +220,23 @@ h4, h5, h6 { font-family: 'Sora', sans-serif; font-weight: 600; }
   flex-shrink: 0;
 }
 
-/* ── Collapse toggle button — desktop only ───────────────────── */
-/* On mobile the hamburger handles open/close; hide the collapse btn */
 .sidebar-collapse-btn {
-  display: flex; /* visible on desktop */
+  display: flex;
 }
 
-/* ── Mobile overrides ────────────────────────────────────────── */
 @media (max-width: 768px) {
-  /* On mobile: sidebar is always full-width overlay; ignore collapsed state */
   .app-shell.sidebar-collapsed .sidebar {
     width: var(--sidebar-w);
   }
-
-  /* Hide desktop collapse toggle on mobile */
   .sidebar-collapse-btn {
     display: none !important;
   }
 }
-/* ── Avatar ────────────────────────────────────────────────── */
+
 .avatar {
   width: 32px;
   height: 32px;
-  border-radius: 8px;   /* FIXED: square not circle, matches design system */
+  border-radius: 8px;
   background: var(--blue);
   display: flex;
   align-items: center;
@@ -269,14 +255,14 @@ h4, h5, h6 { font-family: 'Sora', sans-serif; font-weight: 600; }
   border-radius: 7px;
 }
 
-/* ── User Chip ─────────────────────────────────────────────── */
+
 .user-chip {
   display: flex;
   align-items: center;
   gap: 9px;
   padding: 8px 10px;
   border-radius: 9px;
-  cursor: default;       /* FIXED: not clickable as whole — only logout btn is */
+  cursor: default;
   border: 1px solid rgba(255,255,255,0.08);
   background: rgba(255,255,255,0.04);
   transition: background 0.15s;
@@ -290,9 +276,9 @@ h4, h5, h6 { font-family: 'Sora', sans-serif; font-weight: 600; }
 .user-chip-name  { color: rgba(255,255,255,0.88); font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .user-chip-role  { color: rgba(255,255,255,0.35); font-size: 10px; margin-top: 1px; }
 
-/* ── Mobile hamburger + close btn ──────────────────────────── */
+
 .mobile-menu-btn {
-  display: none;   /* shown via media query below */
+  display: none;
   position: fixed;
   top: 12px;
   left: 12px;
@@ -310,7 +296,7 @@ h4, h5, h6 { font-family: 'Sora', sans-serif; font-weight: 600; }
 }
 
 .sidebar-close-btn {
-  display: none;   /* shown via media query below */
+  display: none;
   position: absolute;
   top: 14px;
   right: 14px;
@@ -325,7 +311,6 @@ h4, h5, h6 { font-family: 'Sora', sans-serif; font-weight: 600; }
   justify-content: center;
 }
 
-/* ── Topbar ────────────────────────────────────────────────── */
 .topbar {
   height: var(--topbar-h);
   background: var(--card);
@@ -374,7 +359,7 @@ h4, h5, h6 { font-family: 'Sora', sans-serif; font-weight: 600; }
 .icon-btn {
   width: 36px;
   height: 36px;
-  min-width: 36px;  /* prevents shrinking */
+  min-width: 36px;
   border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
@@ -385,7 +370,6 @@ h4, h5, h6 { font-family: 'Sora', sans-serif; font-weight: 600; }
   background: var(--card);
   transition: all 0.15s;
   position: relative;
-  /* FIXED: proper button reset */
   font-family: inherit;
   outline: none;
 }
@@ -396,13 +380,11 @@ h4, h5, h6 { font-family: 'Sora', sans-serif; font-weight: 600; }
   color: var(--blue);
 }
 
-/* Keyboard focus ring — accessibility */
 .icon-btn:focus-visible {
   outline: 2px solid var(--blue);
   outline-offset: 2px;
 }
 
-/* ── Cards ─────────────────────────────────────────────────── */
 .card {
   background: var(--card);
   border-radius: var(--radius);
@@ -418,10 +400,8 @@ h4, h5, h6 { font-family: 'Sora', sans-serif; font-weight: 600; }
 }
 
 .card-title { font-size: 15px; font-weight: 600; color: var(--text); }
-
 .card-body { padding: 20px 24px; }
 
-/* ── Stat Cards ────────────────────────────────────────────── */
 .stat-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -462,14 +442,13 @@ h4, h5, h6 { font-family: 'Sora', sans-serif; font-weight: 600; }
 .stat-trend    { font-size: 11px; color: var(--green); margin-top: 5px; font-weight: 600; }
 .stat-trend.down { color: var(--red); }
 
-/* ── Data Tables ───────────────────────────────────────────── */
 .table-wrap {
   overflow-x: auto;
   border-radius: var(--radius);
   border: 1px solid var(--border);
   background: var(--card);
   box-shadow: var(--shadow);
-  -webkit-overflow-scrolling: touch;  /* smooth scroll on iOS */
+  -webkit-overflow-scrolling: touch;
 }
 
 .data-table { width: 100%; border-collapse: collapse; min-width: 540px; }
@@ -498,7 +477,6 @@ h4, h5, h6 { font-family: 'Sora', sans-serif; font-weight: 600; }
 .data-table tr:last-child td  { border-bottom: none; }
 .data-table tbody tr:hover     { background: var(--canvas); cursor: pointer; }
 
-/* Sort indicator */
 .th-sort {
   display: inline-flex;
   align-items: center;
@@ -508,7 +486,6 @@ h4, h5, h6 { font-family: 'Sora', sans-serif; font-weight: 600; }
 }
 .th-sort:hover { color: var(--blue); }
 
-/* ── Badges / Tags ─────────────────────────────────────────── */
 .tag {
   display: inline-flex;
   align-items: center;
@@ -529,7 +506,6 @@ h4, h5, h6 { font-family: 'Sora', sans-serif; font-weight: 600; }
 .tag-gray   { background: #F1F3F9;            color: var(--text-2); }
 .tag-pink   { background: var(--pink-pale);   color: var(--pink); }
 
-/* ── Buttons ───────────────────────────────────────────────── */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -565,8 +541,6 @@ h4, h5, h6 { font-family: 'Sora', sans-serif; font-weight: 600; }
 .btn-lg        { padding: 12px 24px; font-size: 14px; }
 .btn svg       { width: 15px; height: 15px; }
 .btn:disabled  { opacity: 0.5; cursor: not-allowed; transform: none !important; }
-
-/* ── Forms ─────────────────────────────────────────────────── */
 .form-group   { margin-bottom: 16px; }
 .form-label   { display: block; font-size: 12px; font-weight: 600; color: var(--text-2); margin-bottom: 6px; }
 .form-error   { font-size: 11px; color: var(--red); margin-top: 5px; }
@@ -616,12 +590,11 @@ h4, h5, h6 { font-family: 'Sora', sans-serif; font-weight: 600; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
 
-/* ── Modal ─────────────────────────────────────────────────── */
 .modal-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.45);
-  backdrop-filter: blur(4px);          /* FIXED: blur background */
+  backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
@@ -657,13 +630,11 @@ h4, h5, h6 { font-family: 'Sora', sans-serif; font-weight: 600; }
 .modal-body    { padding: 0 24px 20px; }
 .modal-footer  { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; }
 
-/* ── Page Header ───────────────────────────────────────────── */
 .page-header    { margin-bottom: 24px; display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
 .page-header-left { min-width: 0; }
 .page-title     { font-size: clamp(22px, 3vw, 28px); color: var(--text); margin-bottom: 3px; }
 .page-subtitle  { font-size: 13px; color: var(--text-2); font-family: 'Sora', sans-serif; font-weight: 400; }
 
-/* ── Filter Bar ────────────────────────────────────────────── */
 .filter-bar {
   display: flex;
   align-items: center;
@@ -672,23 +643,19 @@ h4, h5, h6 { font-family: 'Sora', sans-serif; font-weight: 600; }
   flex-wrap: wrap;
 }
 
-/* ── Grid Layouts ──────────────────────────────────────────── */
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
 .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
 
-/* ── Attendance Cells ──────────────────────────────────────── */
 .att-present { background: var(--green-pale);  color: #15803D; }
 .att-absent  { background: var(--red-pale);    color: #DC2626; }
 .att-late    { background: var(--amber-pale);  color: #D97706; }
 .att-excused { background: var(--purple-pale); color: var(--purple); }
 
-/* ── Priority ──────────────────────────────────────────────── */
 .priority-high   { color: var(--red);   font-weight: 600; }
 .priority-medium { color: var(--amber); font-weight: 600; }
 .priority-low    { color: var(--green); font-weight: 600; }
 
-/* ── Routine Table ─────────────────────────────────────────── */
 .routine-table              { width: 100%; border-collapse: collapse; }
 .routine-table th           { padding: 10px 12px; background: var(--blue); color: #fff; font-size: 12px; font-weight: 600; text-align: center; white-space: nowrap; }
 .routine-table td           { padding: 8px 10px; border: 1px solid var(--border); font-size: 12px; text-align: center; min-width: 110px; }
@@ -697,7 +664,6 @@ h4, h5, h6 { font-family: 'Sora', sans-serif; font-weight: 600; }
 .routine-cell small         { display: block; font-weight: 400; color: var(--text-2); font-size: 10px; }
 .routine-break              { background: var(--amber-pale); color: var(--amber); font-size: 11px; font-weight: 600; text-align: center; }
 
-/* ── Messaging ─────────────────────────────────────────────── */
 .message-list    { display: flex; flex-direction: column; gap: 2px; }
 .message-item    { padding: 12px 16px; border-radius: 8px; cursor: pointer; border: 1px solid transparent; transition: all 0.15s; }
 .message-item:hover, .message-item.active { background: var(--blue-pale); border-color: rgba(30,63,242,0.2); }
@@ -706,13 +672,11 @@ h4, h5, h6 { font-family: 'Sora', sans-serif; font-weight: 600; }
 .msg-preview     { font-size: 12px; color: var(--text-2); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .msg-meta        { font-size: 11px; color: var(--text-3); margin-top: 3px; }
 
-/* ── Empty State ───────────────────────────────────────────── */
 .empty-state     { text-align: center; padding: 60px 20px; color: var(--text-2); }
 .empty-state svg { width: 48px; height: 48px; margin: 0 auto 12px; display: block; opacity: 0.3; }
 .empty-state h3  { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--text); margin-bottom: 6px; }
 .empty-state p   { font-size: 13px; line-height: 1.6; max-width: 320px; margin: 0 auto; }
 
-/* ── Skeleton ──────────────────────────────────────────────── */
 @keyframes shimmer {
   0%   { background-position: -200% 0; }
   100% { background-position:  200% 0; }
@@ -724,7 +688,6 @@ h4, h5, h6 { font-family: 'Sora', sans-serif; font-weight: 600; }
   animation: shimmer 1.4s infinite;
 }
 
-/* ── Result Bars ───────────────────────────────────────────── */
 .result-subject-row       { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
 .result-subject-row:last-child { border-bottom: none; }
 .result-bar-wrap          { flex: 1; background: var(--canvas); border-radius: 99px; height: 6px; overflow: hidden; }
@@ -732,7 +695,6 @@ h4, h5, h6 { font-family: 'Sora', sans-serif; font-weight: 600; }
 .result-bar.pass          { background: var(--green); }
 .result-bar.fail          { background: var(--red); }
 
-/* ── Academic Calendar ─────────────────────────────────────── */
 .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
 .cal-day  {
   aspect-ratio: 1;
@@ -753,13 +715,11 @@ h4, h5, h6 { font-family: 'Sora', sans-serif; font-weight: 600; }
 .cal-day.has-holiday      { background: var(--red-pale); color: var(--red); }
 .cal-day.other-month      { opacity: 0.35; }
 
-/* ── Fee Status ────────────────────────────────────────────── */
 .fee-summary   { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px; }
 .fee-box       { background: var(--card); border-radius: var(--radius); padding: 16px 20px; border: 1px solid var(--border); box-shadow: var(--shadow); }
 .fee-box-label { font-size: 11px; color: var(--text-2); font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 6px; }
 .fee-box-value { font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 500; color: var(--text); }
 
-/* ── Auth Loading Screen ───────────────────────────────────── */
 .auth-loading-screen {
   min-height: 100vh;
   display: grid;
@@ -775,7 +735,6 @@ h4, h5, h6 { font-family: 'Sora', sans-serif; font-weight: 600; }
   animation: spin 0.7s linear infinite;
 }
 
-/* ── Pagination ────────────────────────────────────────────── */
 .pagination {
   display: flex;
   align-items: center;
@@ -802,7 +761,6 @@ h4, h5, h6 { font-family: 'Sora', sans-serif; font-weight: 600; }
 .page-btn.active   { background: var(--blue); color: #fff; border-color: var(--blue); }
 .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-/* ── BS Date Display ───────────────────────────────────────── */
 .bs-date {
   font-family: 'JetBrains Mono', monospace;
   font-size: 12px;
@@ -815,28 +773,22 @@ h4, h5, h6 { font-family: 'Sora', sans-serif; font-weight: 600; }
   color: var(--text-3);
 }
 
-/* ── Scrollbar ─────────────────────────────────────────────── */
 ::-webkit-scrollbar        { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track  { background: transparent; }
 ::-webkit-scrollbar-thumb  { background: var(--border); border-radius: 99px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--border-mid); }
 
-/* ── Animations ────────────────────────────────────────────── */
 @keyframes spin      { to { transform: rotate(360deg); } }
 @keyframes fadeIn    { from { opacity: 0; } to { opacity: 1; } }
 @keyframes slideUp   { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes pulse     { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
 @keyframes badgePing { 0% { transform: scale(1); opacity: 1; } 75%,100% { transform: scale(1.8); opacity: 0; } }
-
-/* ═══════════════════════════════════════════════════════════
-   RESPONSIVE — Mobile first (≤768px)
-═══════════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
 
-  /* Show hamburger button */
+
   .mobile-menu-btn { display: flex !important; }
 
-  /* Sidebar becomes a fixed slide-in drawer */
+
   .sidebar {
     position: fixed !important;
     left: 0; top: 0; bottom: 0;
@@ -846,35 +798,31 @@ h4, h5, h6 { font-family: 'Sora', sans-serif; font-weight: 600; }
     box-shadow: 4px 0 32px rgba(0,0,0,0.3);
   }
 
-  /* JS adds translateX(0) inline when open */
   .sidebar[style*="translateX(0)"] {
     transform: translateX(0) !important;
   }
 
-  /* Show close button inside sidebar on mobile */
   .sidebar-close-btn { display: flex !important; }
 
-  /* Main area takes full width */
   .app-shell { display: block; height: 100vh; overflow: hidden; }
   .main-area { height: 100vh; }
 
-  /* Offset for hamburger button is no longer needed since it's inside Topbar */
   .topbar { padding-left: 16px; }
 
-  /* Tighter page padding */
+
   .page-content { padding: 16px; }
 
-  /* Stat grid → 2 columns */
+
   .stat-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
   .stat-value { font-size: 20px; }
 
-  /* Grids → single column */
+
   .grid-2, .grid-3, .grid-4, .form-row, .form-row-3 { grid-template-columns: 1fr; }
 
-  /* Fee summary → 1 column */
+
   .fee-summary { grid-template-columns: 1fr; }
 
-  /* Modal full-screen on mobile */
+
   .modal-overlay { padding: 0; align-items: flex-end; }
   .modal {
     max-height: 92vh;
@@ -883,40 +831,38 @@ h4, h5, h6 { font-family: 'Sora', sans-serif; font-weight: 600; }
     max-width: 100%;
   }
 
-  /* Page header stack */
+
   .page-header { flex-direction: column; align-items: flex-start; }
 
-  /* Filter bar → wrap properly */
+
   .filter-bar { gap: 8px; }
   .filter-bar .btn { font-size: 12px; padding: 7px 12px; }
 
-  /* Search in topbar → smaller */
+
   .search-box { max-width: none; }
 
-  /* Topbar user name hidden on very small screens */
+
   .topbar .user-name { display: none; }
 
-  /* Tables scroll horizontally */
+
   .table-wrap { border-radius: 0; border-left: none; border-right: none; }
 
-  /* Routine table scrolls */
+
   .routine-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 }
 
 @media (max-width: 480px) {
-  /* Stat grid → 1 column on tiny screens */
+
   .stat-grid { grid-template-columns: 1fr; }
 
-  /* Page title smaller */
+
   .page-title { font-size: 20px; }
 
-  /* Topbar: hide school name */
+
   .topbar .school-name { display: none; }
 }
 
-/* ═══════════════════════════════════════════════════════════
-   AUTH PORTAL — Parent, Admin, Teacher Login Pages
-═══════════════════════════════════════════════════════════ */
+
 
 .auth-page {
   min-height: 100vh;
@@ -929,7 +875,7 @@ h4, h5, h6 { font-family: 'Sora', sans-serif; font-weight: 600; }
   position: relative;
   overflow: hidden;
   font-family: 'Sora', sans-serif;
-  --role-primary: #1E3FF2; /* Default blue, overridden by roles */
+  --role-primary: #1E3FF2;
   --role-bg: #EEF1FD;
 }
 
@@ -959,7 +905,7 @@ h4, h5, h6 { font-family: 'Sora', sans-serif; font-weight: 600; }
   display: flex;
   align-items: center;
   gap: 10px;
-  marginBottom: 12px;
+  margin-bottom: 12px;
 }
 
 .auth-brand-icon {
@@ -975,7 +921,7 @@ h4, h5, h6 { font-family: 'Sora', sans-serif; font-weight: 600; }
 
 .auth-brand-name {
   font-family: 'DM Serif Display', serif;
-  fontSize: 21px;
+  font-size: 21px;
   color: #1A1A2E;
   letter-spacing: -0.3px;
 }
@@ -1029,7 +975,7 @@ h4, h5, h6 { font-family: 'Sora', sans-serif; font-weight: 600; }
 }
 
 .auth-progress-label {
-  fontSize: 11px;
+  font-size: 11px;
   color: #9CA3AF;
   margin-left: 8px;
   font-weight: 500;
@@ -1238,9 +1184,6 @@ h4, h5, h6 { font-family: 'Sora', sans-serif; font-weight: 600; }
   animation: authSpin 0.7s linear infinite;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   PRINT — for fee receipts and exam results
-═══════════════════════════════════════════════════════════ */
 @media print {
   .sidebar, .topbar, .filter-bar, .btn, .mobile-menu-btn { display: none !important; }
   .app-shell { display: block; }

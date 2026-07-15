@@ -10,7 +10,6 @@ import {
   Eye, Users, ChevronLeft, ChevronRight, Lock, Unlock
 } from "lucide-react";
 
-// ── Skeleton ──────────────────────────────────────────────────────────────────
 function Skeleton({ height = 16, width = "100%", radius = 6 }) {
   return <div className="skeleton" style={{ height, width, borderRadius: radius }} />;
 }
@@ -389,9 +388,6 @@ function StudentModal({ student, classes, onSave, onClose, saving, isAdmin }) {
   );
 }
 
-// ════════════════════════════════════════════════════════════════════════════════
-// MAIN PAGE
-// ════════════════════════════════════════════════════════════════════════════════
 export default function StudentsPage() {
   const { currentUser } = useApp();
 

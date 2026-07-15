@@ -209,7 +209,7 @@ export const AppProvider = ({ children }) => {
     }
   }, [currentUser]);
 
-  // Save notifications when they change
+  // Save notifications
   useEffect(() => {
     if (!currentUser) return;
     const key = `ss_notifications_${currentUser._id || currentUser.id}`;
@@ -276,7 +276,6 @@ export const AppProvider = ({ children }) => {
             }
           });
 
-          // Trigger toast for new notifications
           newNotifs.forEach(notif => {
             toast.success(notif.title, { id: notif.id, duration: 4000 });
           });
@@ -418,7 +417,6 @@ export const AppProvider = ({ children }) => {
     return () => axios.interceptors.response.eject(interceptor);
   }, [offline]); 
 
-  // ── User Management ───────────────────────────────────────────────────────
   const login = useCallback((token, user, schoolData) => {
     localStorage.setItem("ss_token",  token);
     applyAxiosAuth(token);
@@ -437,7 +435,6 @@ export const AppProvider = ({ children }) => {
     setSchool(prev => ({ ...prev, ...schoolData, academicYear: getCurrentAcademicYear() }));
   }, []);
 
-  // ── Logout ────────────────────────────────────────────────────────────────
   const handleLogout = useCallback(() => {
     clearStorage();
     clearAxiosAuth();
@@ -448,7 +445,6 @@ export const AppProvider = ({ children }) => {
     setSettings(DEFAULT_SETTINGS);
   }, []);
 
-  // ── Notifications ─────────────────────────────────────────────────────────
   const markNotifRead   = useCallback((id) =>
     setNotifications(p => p.map(n => n.id === id ? { ...n, read: true } : n)), []);
   const markAllRead     = useCallback(() =>
@@ -472,7 +468,6 @@ export const AppProvider = ({ children }) => {
     setNotifications(p => [notif, ...p]), []);
   const unreadCount = notifications.filter(n => !n.read).length;
 
-  // ── Settings ──────────────────────────────────────────────────────────────
   const updateSetting = useCallback((key, value) => {
     setSettings(prev => {
       const next = { ...prev, [key]: value };
@@ -482,7 +477,6 @@ export const AppProvider = ({ children }) => {
     });
   }, []);
 
-  // ── Dark mode sync ────────────────────────────────────────────────────────
   useEffect(() => {
     document.body.classList.toggle("dark", settings.theme === "dark");
   }, [settings.theme]);

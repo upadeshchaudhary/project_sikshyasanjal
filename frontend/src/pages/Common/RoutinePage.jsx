@@ -48,7 +48,6 @@ export default function RoutinePage() {
   const [loading,       setLoading]       = useState(false);
   const [activeDay,     setActiveDay]     = useState("all");
 
-  // Fetch class list
   useEffect(() => {
     if (isParent) return;
     axios.get("/students/classes")
@@ -60,7 +59,6 @@ export default function RoutinePage() {
       .catch(() => {});
   }, [isParent, selectedClass]);
 
-  // Fetch routine from API
   useEffect(() => {
     if (!selectedClass) return;
     setLoading(true);
@@ -72,7 +70,6 @@ export default function RoutinePage() {
 
   const displayDays = activeDay === "all" ? WEEKDAYS : [activeDay];
 
-  // Build all periods for a day from the routine
   function getPeriodsForDay(day) {
     const dayData = routine?.[day] || [];
     return dayData;

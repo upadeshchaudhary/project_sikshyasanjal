@@ -75,7 +75,6 @@ const LandingPage = () => {
     }, { threshold: 0.08 });
     revealEls.forEach(el => io.observe(el));
 
-    // Navbar shadow on scroll
     const handleScroll = () => {
       const nb = document.getElementById('navbar');
       if (nb) {
@@ -101,7 +100,6 @@ const LandingPage = () => {
   const handleChange = (e) => {
     let { name, value } = e.target;
     
-    // Format inputs as they're typed
     if (name === "firstName" || name === "lastName") {
       value = value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
     } else if (name === "email") {
@@ -115,7 +113,6 @@ const LandingPage = () => {
     e.preventDefault();
     if (submitting) return;
 
-    // Validation
     const errors = [];
     if (!formData.firstName?.trim()) errors.push("First name is required.");
     if (!formData.lastName?.trim()) errors.push("Last name is required.");
@@ -673,9 +670,7 @@ const LandingPage = () => {
                   <img src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=600&q=85&auto=format&fit=crop" alt="Library" className="w-full h-[182px] object-cover"/>
                 </div>
               </div>
-              {/* Gold frame accent */}
               <div className="absolute -bottom-6 -left-6 w-40 h-40 border border-goldlt/40 -z-0 pointer-events-none"></div>
-              {/* Label badge */}
               <div className="absolute -top-4 -right-4 bg-maroon text-white px-5 py-4 text-center shadow-lg z-10">
                 <div className="font-display text-3xl font-bold text-goldlt leading-none">1,200<span className="text-xl">+</span></div>
                 <div className="font-body text-[8px] tracking-[0.18em] uppercase text-white/60 mt-1">Students</div>
@@ -728,10 +723,6 @@ const LandingPage = () => {
         </div>
       </section>
 
-
-      {/* ============================================================
-           WHY CHOOSE US  (3 pillars)
-      ============================================================ */}
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -783,10 +774,6 @@ const LandingPage = () => {
         </div>
       </section>
 
-
-      {/* ============================================================
-           SIKSHASANJAL PLATFORM  (Web App Features)
-      ============================================================ */}
       <section id="platform" className="py-28 bg-ink grain-dark relative overflow-hidden">
         {/* Subtle background glow */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full pointer-events-none" style={{background: "radial-gradient(circle, rgba(92,19,40,0.35) 0%, transparent 70%)"}}></div>

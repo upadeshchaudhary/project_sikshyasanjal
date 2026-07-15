@@ -10,7 +10,6 @@ import {
   Moon, Sun, Loader2, Menu,
 } from "lucide-react";
 
-// ─── Route → page title map (auto breadcrumb fallback) ────────────────────────
 const ROUTE_TITLES = {
   "/dashboard":  "Dashboard",
   "/students":   "Student Management",
@@ -32,14 +31,12 @@ const ROLE_LABELS = {
   parent:  "Parent / Guardian",
 };
 
-// ─── Avatar color per role ─────────────────────────────────────────────────────
 const AVATAR_BG = {
   admin:   "linear-gradient(135deg,#1E3FF2,#3D5AFF)",
   teacher: "linear-gradient(135deg,#0F6E56,#10B981)",
   parent:  "linear-gradient(135deg,#6D28D9,#8B5CF6)",
 };
 
-// ─── Notification type metadata ────────────────────────────────────────────────
 const NOTIF_META = {
   homework: { icon: BookOpen,      bg: "#EEF1FE", color: "#1E3FF2" },
   message:  { icon: MessageSquare, bg: "#DCFCE7", color: "#16A34A" },
@@ -51,7 +48,6 @@ const NOTIF_META = {
   default:  { icon: AlertCircle,   bg: "#F1F3F9", color: "#5A6080" },
 };
 
-// ─── Search result type metadata ──────────────────────────────────────────────
 const SEARCH_TYPE_META = {
   student: { icon: Users,         color: "#1E3FF2", bg: "#EEF1FE", path: "/students" },
   teacher: { icon: GraduationCap, color: "#16A34A", bg: "#DCFCE7", path: "/teachers" },
@@ -59,7 +55,6 @@ const SEARCH_TYPE_META = {
   notice:  { icon: FileText,      color: "#7C3AED", bg: "#EDE9FE", path: "/notices"  },
 };
 
-// ─── Search results dropdown ───────────────────────────────────────────────────
 function SearchDropdown({ results, query, loading, onSelect }) {
   if (loading) {
     return (
@@ -139,7 +134,6 @@ function SearchDropdown({ results, query, loading, onSelect }) {
   );
 }
 
-// ─── Single notification row ───────────────────────────────────────────────────
 function NotifRow({ notif, onRead, onClear, onNavigate }) {
   const meta = NOTIF_META[notif.type] || NOTIF_META.default;
   const Icon = meta.icon;
@@ -182,7 +176,6 @@ function NotifRow({ notif, onRead, onClear, onNavigate }) {
   );
 }
 
-// ─── Notification Dropdown ─────────────────────────────────────────────────────
 function NotifDropdown({ onClose }) {
   const { notifications, markNotifRead, markAllRead, clearNotif, unreadCount } = useApp();
   const navigate = useNavigate();
@@ -244,13 +237,11 @@ function NotifDropdown({ onClose }) {
   );
 }
 
-// ─── Main Topbar ───────────────────────────────────────────────────────────────
 export default function Topbar({ title }) {
   const { currentUser, school, unreadCount, settings, updateSetting, setMobileOpen } = useApp();
   const navigate  = useNavigate();
   const location  = useLocation();
 
-  // Auto-derive title from route if not passed as prop
   const pageTitle = title || ROUTE_TITLES[location.pathname] || "SikshyaSanjal";
 
   const [query,       setQuery]       = useState("");
@@ -267,7 +258,6 @@ export default function Topbar({ title }) {
   const initials  = currentUser?.name?.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase() || "?";
   const avatarBg  = AVATAR_BG[currentUser?.role] || AVATAR_BG.admin;
 
-  // ── Cmd+K / Ctrl+K to focus search ────────────────────────────────────────
   useEffect(() => {
     const handler = (e) => {
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
@@ -285,7 +275,6 @@ export default function Topbar({ title }) {
     return () => document.removeEventListener("keydown", handler);
   }, []);
 
-  // ── Close dropdowns on outside click ──────────────────────────────────────
   useEffect(() => {
     const handler = (e) => {
       if (notifRef.current  && !notifRef.current.contains(e.target))  setShowNotif(false);
@@ -295,7 +284,6 @@ export default function Topbar({ title }) {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  // ── Debounced real API search ──────────────────────────────────────────────
   const doSearch = useCallback(async (q) => {
     if (q.trim().length < 2) { setResults([]); setSearching(false); return; }
     setSearching(true);

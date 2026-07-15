@@ -119,7 +119,6 @@ exports.uploadResult = async (req, res) => {
     const { userId, role } = req.user;
     let { student, examName, examYear, class: cls, subjects } = req.body;
 
-    // Logic: Year should always be current year
     examYear = getCurrentBsYear();
 
     if (!student || !isValidId(student)) return res.status(400).json({ success: false, message: "Valid student ID is required." });
@@ -228,7 +227,6 @@ exports.updateResult = async (req, res) => {
     const { subjects } = req.body;
     if (!Array.isArray(subjects) || subjects.length === 0) return res.status(400).json({ success: false, message: "Subjects array is required for update." });
 
-    // ── Shared Validation ───────────────────────────────────────────────────
     const subjectErrors = [];
     for (let i = 0; i < subjects.length; i++) {
       const s = subjects[i];

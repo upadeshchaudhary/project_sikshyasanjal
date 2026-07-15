@@ -9,24 +9,18 @@ import {
 } from "lucide-react";
 import { getDaysInBSMonth, BS_MONTH_NAMES, adToBs, bsTotalDays } from "../../utils/calendar";
 
-// ── Status config ─────────────────────────────────────────────────────────────
+
 const STATUS_OPTIONS = ["present", "absent", "late", "excused"];
 const STATUS_LABEL   = { present: "P", absent: "A", late: "L", excused: "E" };
 const STATUS_FULL    = { present: "Present", absent: "Absent", late: "Late", excused: "Excused" };
 const STATUS_COLOR   = { present: "#15803D", absent: "#DC2626", late: "#D97706", excused: "#7C3AED" };
 const STATUS_BG      = { present: "#DCFCE7", absent: "#FEE2E2", late: "#FEF3C7", excused: "#EDE9FE" };
 
-// Day names for calendar header
 const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-// ── Helpers ───────────────────────────────────────────────────────────────────
-
-// Anchor: 1 Baisakh 2082 = Saturday (April 14, 2025 AD) → DOW index 6
 const ANCHOR = { year: 2082, month: 1, dow: 6 };
 
 function getDaysBefore(year, month) {
   let total = 0;
-  // Use a fixed epoch from calendar utility to be more robust
   const epochTotal = bsTotalDays(ANCHOR.year, ANCHOR.month, 1);
   const targetTotal = bsTotalDays(year, month, 1);
   return targetTotal - epochTotal;
@@ -59,14 +53,12 @@ function isPastOrToday(year, month, day, today) {
   return day <= today.day;
 }
 
-// ── Skeleton loader ───────────────────────────────────────────────────────────
 function Skeleton({ height = 20, width = "100%", radius = 6, style = {} }) {
   return (
     <div className="skeleton" style={{ height, width, borderRadius: radius, ...style }} />
   );
 }
 
-// ── Nepal live clock ──────────────────────────────────────────────────────────
 function NepalClock() {
   const [now, setNow] = useState(new Date());
   useEffect(() => {
@@ -96,7 +88,6 @@ function NepalClock() {
   );
 }
 
-// ── Month navigator ───────────────────────────────────────────────────────────
 function MonthNav({ year, month, today, onChange }) {
   const canNext = !(year === today.year && month >= today.month);
   return (
@@ -119,7 +110,6 @@ function MonthNav({ year, month, today, onChange }) {
   );
 }
 
-// ── Legend ────────────────────────────────────────────────────────────────────
 function Legend() {
   return (
     <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
@@ -146,16 +136,13 @@ function Legend() {
   );
 }
 
-// ── Student Calendar — real data from API ─────────────────────────────────────
 function StudentCalendar({ studentId, studentName, studentRollNo, studentClass, year, month, today, onMonthChange, holidays }) {
   const [records,  setRecords]  = useState({});
   const [loading,  setLoading]  = useState(true);
   const [hovered,  setHovered]  = useState(null);
-
   const days     = getDaysInBSMonth(year, month);
   const firstDow = getFirstDayOfMonth(year, month);
 
-  // FIXED: fetch real attendance from API
   useEffect(() => {
     let cancelled = false;
     const load = async () => {
@@ -165,7 +152,6 @@ function StudentCalendar({ studentId, studentName, studentRollNo, studentClass, 
           params: { year, month, student: studentId },
         });
         if (cancelled) return;
-        // Build map of dateBs → status
         const map = {};
         (res.data.records || []).forEach(r => {
           if (r.dateBs) map[r.dateBs] = r.status;
@@ -181,7 +167,6 @@ function StudentCalendar({ studentId, studentName, studentRollNo, studentClass, 
     return () => { cancelled = true; };
   }, [studentId, year, month]);
 
-  // FIXED: holiday set from API data (not hardcoded)
   const holidaySet = useMemo(() => {
     const set = new Set();
     holidays.forEach(h => {
@@ -190,7 +175,6 @@ function StudentCalendar({ studentId, studentName, studentRollNo, studentClass, 
     return set;
   }, [holidays, year, month]);
 
-  // Summary counts from real data
   const counts = useMemo(() => {
     const c = { present: 0, absent: 0, late: 0, excused: 0, holiday: 0 };
     for (let d = 1; d <= days; d++) {
@@ -373,18 +357,14 @@ function StudentCalendar({ studentId, studentName, studentRollNo, studentClass, 
   );
 }
 
-// ════════════════════════════════════════════════════════════════════════════════
-// MAIN PAGE
-// ════════════════════════════════════════════════════════════════════════════════
+
 export default function AttendancePage() {
   const { currentUser } = useApp();
 
-  // Compute role at render time — never store in useState
   const isParent  = currentUser?.role === "parent";
   const isTeacher = currentUser?.role === "teacher";
   const isAdmin   = currentUser?.role === "admin";
 
-  // FIXED: derive today dynamically — not hardcoded
   const today = useMemo(() => getTodayBS(), []);
 
   // Navigation state
@@ -395,27 +375,24 @@ export default function AttendancePage() {
   const [classes,       setClasses]       = useState([]);
   const [selectedClass, setSelectedClass] = useState("");
   const [students,      setStudents]      = useState([]);
-  const [attendance,    setAttendance]    = useState({});   // { studentId: status }
-  const [existingRecs,  setExistingRecs]  = useState({});   // already saved for today
-  const [holidays,      setHolidays]      = useState([]);   // from API
+  const [attendance,    setAttendance]    = useState({});   
+  const [existingRecs,  setExistingRecs]  = useState({});   
+  const [holidays,      setHolidays]      = useState([]);   
   const [view,          setView]          = useState("calendar");
   const [loadingStudents, setLoadingStudents] = useState(false);
   const [saving,        setSaving]        = useState(false);
 
-  // FIXED: today's BS key for marking
   const todayKey = formatBsDate(today.year, today.month, today.day);
   const todayAdKey = useMemo(() => {
     const now = new Date();
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
   }, []);
 
-  // FIXED: day-of-week for today (to check if school is open)
   const todayFirstDow = getFirstDayOfMonth(today.year, today.month);
   const todayDow      = (todayFirstDow + today.day - 1) % 7;
   const todayIsHoliday = holidays.some(h => h.startDateBs === todayKey || h.startDateBs?.startsWith(todayKey));
   const schoolClosedToday = isSaturday(todayDow) || todayIsHoliday;
 
-  // FIXED: fetch holidays from calendar events API (using supported /calendar route)
   useEffect(() => {
     axios.get("/calendar", { params: { year: today.year } })
       .then(res => {
@@ -425,7 +402,6 @@ export default function AttendancePage() {
       .catch(() => setHolidays([]));
   }, [today.year]);
 
-  // FIXED: fetch available classes from API (not from mockData)
   useEffect(() => {
     if (!isParent) {
       axios.get("/students/classes")
@@ -440,7 +416,6 @@ export default function AttendancePage() {
     }
   }, [isParent, selectedClass]);
 
-  // FIXED: fetch students for selected class from API
   useEffect(() => {
     if (!selectedClass || isParent) return;
     setLoadingStudents(true);
@@ -448,7 +423,6 @@ export default function AttendancePage() {
       .then(res => {
         const list = res.data.students || [];
         setStudents(list);
-        // Pre-fill attendance state — default all to "present"
         const defaultAtt = {};
         list.forEach(s => { defaultAtt[s._id] = "present"; });
         setAttendance(defaultAtt);
@@ -457,7 +431,6 @@ export default function AttendancePage() {
       .finally(() => setLoadingStudents(false));
   }, [selectedClass, isParent]);
 
-  // FIXED: load today's existing attendance records so teacher sees what was already marked
   useEffect(() => {
     if (!selectedClass || isParent || view !== "daily") return;
     axios.get("/attendance", {
@@ -469,7 +442,6 @@ export default function AttendancePage() {
           existing[r.student?._id || r.student] = r.status;
         });
         setExistingRecs(existing);
-        // Merge existing into attendance state
         setAttendance(prev => ({ ...prev, ...existing }));
       })
       .catch(() => {});
@@ -479,7 +451,6 @@ export default function AttendancePage() {
     setYear(y); setMonth(m);
   }, []);
 
-  // FIXED: real bulk attendance save
   const handleSave = async () => {
     if (!selectedClass || students.length === 0) return;
 
@@ -500,7 +471,6 @@ export default function AttendancePage() {
       toast.success(
         `Attendance saved for Class ${selectedClass} — ${today.day} ${BS_MONTH_NAMES[today.month - 1]} ${today.year} BS`
       );
-      // Reload existing records
       setExistingRecs({ ...attendance });
     } catch (err) {
       const msg = err.response?.data?.message || "Failed to save attendance.";
@@ -510,7 +480,6 @@ export default function AttendancePage() {
     }
   };
 
-  // Mark all present shortcut
   const markAllPresent = () => {
     const all = {};
     students.forEach(s => { all[s._id] = "present"; });
@@ -552,7 +521,6 @@ export default function AttendancePage() {
             </div>
           </div>
           <div style={{ marginBottom: 12 }}><Legend /></div>
-          {/* FIXED: real student data from API via currentUser */}
           <StudentCalendar
             studentId={childId}
             studentName={childName}
@@ -602,7 +570,6 @@ export default function AttendancePage() {
           </div>
         </div>
 
-        {/* School closed alert */}
         {view === "daily" && schoolClosedToday && (
           <div style={{
             display: "flex", alignItems: "center", gap: 10,
@@ -617,7 +584,6 @@ export default function AttendancePage() {
           </div>
         )}
 
-        {/* Class selector — FIXED: role-scoped from API */}
         <div className="filter-bar" style={{ marginBottom: 16 }}>
           <select
             className="form-select"
@@ -644,7 +610,6 @@ export default function AttendancePage() {
           )}
         </div>
 
-        {/* ── CALENDAR VIEW ── */}
         {view === "calendar" && (
           <>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12, flexWrap: "wrap", gap: 8 }}>
@@ -683,7 +648,6 @@ export default function AttendancePage() {
           </>
         )}
 
-        {/* ── DAILY MARK VIEW ── */}
         {view === "daily" && (
           <>
             {schoolClosedToday ? (
@@ -711,7 +675,6 @@ export default function AttendancePage() {
               </div>
             ) : (
               <>
-                {/* Bulk actions */}
                 <div style={{ display: "flex", gap: 10, marginBottom: 12, flexWrap: "wrap" }}>
                   <button className="btn btn-outline btn-sm" onClick={markAllPresent}
                     style={{ display: "flex", alignItems: "center", gap: 6 }}>
@@ -783,7 +746,6 @@ export default function AttendancePage() {
                   </table>
                 </div>
 
-                {/* Save button */}
                 <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 16 }}>
                   <button
                     className="btn btn-primary"

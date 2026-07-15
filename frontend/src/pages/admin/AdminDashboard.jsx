@@ -47,7 +47,6 @@ export default function AdminDashboard({ user }) {
       setHomework(homeworkRes.data.homework || []);
     } catch (err) {
       if (!isRefresh) toast.error("Failed to load dashboard data.");
-      // Set default fallback values to prevent undefined errors
       setStats(null);
       setNotices([]);
       setHomework([]);
@@ -63,7 +62,6 @@ export default function AdminDashboard({ user }) {
       const res = await axios.get("/dashboard/admin/charts");
       setChartData(res.data || []);
     } catch {
-      // Charts are non-critical — fail silently
     } finally {
       setChartsLoading(false);
     }

@@ -10,7 +10,6 @@ if (!process.env.JWT_SECRET) {
 const JWT_SECRET  = process.env.JWT_SECRET;
 const JWT_EXPIRES = process.env.JWT_EXPIRES || "7d";
 
-// ── Token factory — role only, no schoolId ────────────────────────────────────
 const signToken = (user) =>
   jwt.sign(
     { userId: user._id.toString(), role: user.role },
@@ -18,7 +17,6 @@ const signToken = (user) =>
     { expiresIn: JWT_EXPIRES }
   );
 
-// ── Safe user shape ────────────────────────────────────────────────────────────
 const userShape = (user) => {
   const hasChildData = user.childId && typeof user.childId === "object";
   return {
@@ -36,7 +34,6 @@ const userShape = (user) => {
   };
 };
 
-// ── Safe school shape ─────────────────────────────────────────────────────────
 const schoolShape = (school) => ({
   _id:     school._id,
   name:    school.name,
@@ -44,9 +41,8 @@ const schoolShape = (school) => ({
   phone:   school.phone   || "",
 });
 
-// ════════════════════════════════════════════════════════════════════════════════
-// GET /api/auth/school — Returns the single school info (used by login page)
-// ════════════════════════════════════════════════════════════════════════════════
+
+// GET /api/auth/school 
 exports.getSchool = async (req, res) => {
   try {
     const school = await School.findOne().lean();
@@ -59,9 +55,8 @@ exports.getSchool = async (req, res) => {
   }
 };
 
-// ════════════════════════════════════════════════════════════════════════════════
+
 // POST /api/auth/login — Admin / Teacher email + password login
-// ════════════════════════════════════════════════════════════════════════════════
 exports.adminTeacherLogin = async (req, res) => {
   try {
     const { email, password, role } = req.body;
@@ -101,9 +96,8 @@ exports.adminTeacherLogin = async (req, res) => {
   }
 };
 
-// ════════════════════════════════════════════════════════════════════════════════
 // POST /api/auth/parent/send-otp — Send OTP to parent's mobile number
-// ════════════════════════════════════════════════════════════════════════════════
+
 exports.parentSendOtp = async (req, res) => {
   try {
     const { phone } = req.body;
@@ -144,9 +138,7 @@ exports.parentSendOtp = async (req, res) => {
   }
 };
 
-// ════════════════════════════════════════════════════════════════════════════════
 // POST /api/auth/parent/verify-otp — Verify OTP and log parent in
-// ════════════════════════════════════════════════════════════════════════════════
 exports.verifyOtp = async (req, res) => {
   try {
     const { phone, otp } = req.body;
@@ -196,9 +188,7 @@ exports.verifyOtp = async (req, res) => {
   }
 };
 
-// ════════════════════════════════════════════════════════════════════════════════
 // GET /api/auth/me — Restore session from JWT
-// ════════════════════════════════════════════════════════════════════════════════
 exports.getMe = async (req, res) => {
   try {
     const user = await User.findById(req.user.userId).populate("childId", "name class rollNo").lean();
@@ -218,9 +208,7 @@ exports.getMe = async (req, res) => {
   }
 };
 
-// ════════════════════════════════════════════════════════════════════════════════
 // POST /api/auth/logout
-// ════════════════════════════════════════════════════════════════════════════════
 exports.logout = (_req, res) => {
   res.json({ success: true, message: "Logged out successfully." });
 };

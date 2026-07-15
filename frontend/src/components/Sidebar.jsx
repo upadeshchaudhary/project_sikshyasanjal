@@ -10,7 +10,6 @@ import {
   Settings, Menu, X,
 } from "lucide-react";
 
-// ─── Navigation config per role ───────────────────────────────────────────────
 const adminNav = [
   { label: "Overview", items: [
     { path: "/dashboard",  icon: LayoutDashboard, label: "Dashboard" },
@@ -75,7 +74,6 @@ const ROLE_LABELS = {
   parent:  "Parent / Guardian",
 };
 
-// ─── Component ────────────────────────────────────────────────────────────────
 export default function Sidebar() {
   const { currentUser, school, logout, unreadCount, unreadMessagesCount, settings, updateSetting, mobileOpen, setMobileOpen } = useApp();
   const navigate  = useNavigate();
@@ -85,20 +83,16 @@ export default function Sidebar() {
   const nav        = navByRole[currentUser?.role] || [];
   const isCollapsed = settings.sidebarCollapsed;
 
-
-  // ── Close mobile sidebar on route change ───────────────────────────────────
   useEffect(() => {
     setMobileOpen(false);
   }, [location.pathname]);
 
-  // ── Close mobile sidebar on Escape ────────────────────────────────────────
   useEffect(() => {
     const handler = (e) => { if (e.key === "Escape") setMobileOpen(false); };
     document.addEventListener("keydown", handler);
     return () => document.removeEventListener("keydown", handler);
   }, []);
 
-  // ── Logout flow ────────────────────────────────────────────────────────────
   function handleLogoutClick() {
     if (logoutConfirm) {
       logout();
@@ -110,11 +104,9 @@ export default function Sidebar() {
     }
   }
 
-  // ── Avatar initials ────────────────────────────────────────────────────────
   const initials = currentUser?.name
     ?.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase() || "?";
 
-  // ── Role-specific avatar color ─────────────────────────────────────────────
   const avatarColor = {
     admin:   "linear-gradient(135deg, #1E3FF2, #3D5AFF)",
     teacher: "linear-gradient(135deg, #0F6E56, #10B981)",
@@ -153,7 +145,6 @@ export default function Sidebar() {
         {/* ── Header: school identity + collapse toggle ───────────────────── */}
         <div className="sidebar-logo">
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            {/* School icon — always visible */}
             <div style={{
               width: 36, height: 36,
               background: "rgba(255,255,255,0.15)",
@@ -163,8 +154,6 @@ export default function Sidebar() {
             }}>
               <School size={18} color="#fff" />
             </div>
-
-            {/* School name — hidden when collapsed */}
             {!isCollapsed && (
               <div style={{ minWidth: 0, flex: 1 }}>
                 <div style={{
@@ -290,8 +279,6 @@ export default function Sidebar() {
   );
 }
 
-// ── Inline styles ──────────────────────────────────────────────────────────────
-
 const backdropStyle = {
   position: "fixed",
   inset: 0,
@@ -314,7 +301,6 @@ const closeBtnStyle = {
   justifyContent: "center",
 };
 
-// Nav item when sidebar is collapsed: center the icon
 const collapsedNavItemStyle = {
   justifyContent: "center",
   padding: "9px",

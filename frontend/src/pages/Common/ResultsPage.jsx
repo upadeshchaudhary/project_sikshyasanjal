@@ -7,7 +7,6 @@ import axios from "axios";
 import { SUBJECTS } from "../../data/mockData";
 import { adToBs } from "../../utils/calendar";
 
-// ── Constants ─────────────────────────────────────────────────────────────────
 const EXAM_TYPES = [
   "First Terminal Examination",
   "Second Terminal Examination",
@@ -20,7 +19,6 @@ const EXAM_TYPES = [
 
 const MARKS_OPTIONS = [20, 25, 50, 100];
 
-// ── Components ────────────────────────────────────────────────────────────────
 function Skeleton({ height = 16, width = "100%", radius = 6 }) {
   return <div className="skeleton" style={{ height, width, borderRadius: radius }} />;
 }
@@ -39,7 +37,6 @@ function Field({ label, error, children }) {
   );
 }
 
-// ── Result Upload/Edit Modal ──────────────────────────────────────────────────
 function ResultModal({ result, classes, isTeacher, teacherSubject, onSave, onClose, saving }) {
   const isEdit = !!result;
   const [students, setStudents] = useState([]);
@@ -73,7 +70,6 @@ function ResultModal({ result, classes, isTeacher, teacherSubject, onSave, onClo
 
   const [errors, setErrors] = useState({});
 
-  // Fetch students when class changes
   useEffect(() => {
     if (!form.class) return;
     setLoadingStudents(true);
@@ -87,7 +83,6 @@ function ResultModal({ result, classes, isTeacher, teacherSubject, onSave, onClo
     if (k === "examYear") return;
     let updates = { [k]: v };
     
-    // Logic: If Final Examination, force all full marks to 100
     if (k === "examName" && v === "Final Examination") {
       updates.subjects = form.subjects.map(s => ({ ...s, fullMarks: 100 }));
     }
@@ -101,14 +96,12 @@ function ResultModal({ result, classes, isTeacher, teacherSubject, onSave, onClo
     let finalVal = val;
 
     if (field === "marksObtained") {
-      // Logic: obtained marks cannot exceed full marks
       const full = Number(newSubs[idx].fullMarks);
       if (Number(val) > full) finalVal = full;
     }
 
     newSubs[idx] = { ...newSubs[idx], [field]: finalVal };
     
-    // If exam is Final, keep fullMarks locked at 100
     if (form.examName === "Final Examination" && field === "fullMarks") {
       newSubs[idx].fullMarks = 100;
     }
@@ -255,7 +248,6 @@ function ResultModal({ result, classes, isTeacher, teacherSubject, onSave, onClo
   );
 }
 
-// ── Main Page ────────────────────────────────────────────────────────────────
 export default function ResultsPage() {
   const { currentUser } = useApp();
   const isAdmin   = currentUser?.role === "admin";
@@ -271,7 +263,6 @@ export default function ResultsPage() {
   const [editResult,  setEditResult]  = useState(null);
   const [saving,      setSaving]      = useState(false);
 
-  // Fetch authorized classes
   useEffect(() => {
     if (isParent) return;
     axios.get("/students/classes")

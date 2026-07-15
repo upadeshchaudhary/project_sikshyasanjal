@@ -263,7 +263,6 @@ export default function CalendarPage() {
     } catch (err) { toast.error(err.response?.data?.message || "Failed to remove event."); }
   };
 
-  // Upcoming from API
   const [upcoming, setUpcoming] = useState([]);
   useEffect(() => {
     axios.get("/calendar/upcoming", { params: { limit: 8 } })
@@ -275,7 +274,6 @@ export default function CalendarPage() {
   const firstDow    = getFirstDow(selectedYear, selectedMonth);
   const YEARS       = Array.from({ length: 13 }, (_, i) => 2079 + i);
 
-  // Events keyed by startDateBs
   const eventMap = {};
   events.forEach(e => {
     const key = e.startDateBs;

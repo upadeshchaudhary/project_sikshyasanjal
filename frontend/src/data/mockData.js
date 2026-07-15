@@ -6,7 +6,7 @@ export const mockSchool = {
   estYear: 2041,
 };
 
-// ─── Students ──────────────────────────────────────────────────────────────────
+// ─── Students ───
 export const mockStudents = [
   { id:"s1",  rollNo:"001", name:"Aarav Sharma",    class:"10A", parentName:"Rajesh Sharma",  parentPhone:"9841000001", gender:"Male",   address:"Baneshwor, Kathmandu", dob:"2009-04-15" },
   { id:"s2",  rollNo:"002", name:"Priya Thapa",     class:"10A", parentName:"Mohan Thapa",    parentPhone:"9841000002", gender:"Female", address:"Lazimpat, Kathmandu",  dob:"2009-07-22" },
@@ -22,8 +22,7 @@ export const mockStudents = [
   { id:"s12", rollNo:"012", name:"Pooja Joshi",     class:"7A",  parentName:"Shyam Joshi",    parentPhone:"9841000012", gender:"Female", address:"New Road, Kathmandu",  dob:"2012-03-08" },
 ];
 
-// ─── Teachers ──────────────────────────────────────────────────────────────────
-// Emails use a generic pattern — the actual domain comes from the school's setup
+// ─── Teachers ───
 export const mockTeachers = [
   { id:"t1", name:"Sunita Koirala",  subject:"Mathematics",   classes:["10A","10B","9A"], qualification:"M.Ed Mathematics", phone:"9851000001", email:"sunita.koirala@school.edu.np",  joiningDate:"2075-04-01" },
   { id:"t2", name:"Ramesh Dhakal",   subject:"Science",       classes:["9A","9B","8A"],  qualification:"B.Sc Physics",     phone:"9851000002", email:"ramesh.dhakal@school.edu.np",   joiningDate:"2076-06-15" },
@@ -32,7 +31,7 @@ export const mockTeachers = [
   { id:"t5", name:"Kamala Thapa",    subject:"Social Studies",classes:["8A","8B","7A"],  qualification:"B.Ed Social",      phone:"9851000005", email:"kamala.thapa@school.edu.np",    joiningDate:"2078-03-05" },
 ];
 
-// ─── Homework ──────────────────────────────────────────────────────────────────
+// ─── Homework ───
 export const mockHomework = [
   { id:"h1", title:"Quadratic Equations Practice Set", subject:"Mathematics",  class:"10A", dueDate:"2082-01-20", priority:"high",   description:"Complete exercises 5.1 to 5.4 from the textbook.",             postedBy:"Sunita Koirala",  postedAt:"2082-01-15" },
   { id:"h2", title:"Essay: My Neighbourhood",          subject:"Nepali",       class:"9B",  dueDate:"2082-01-22", priority:"medium", description:"Write a 500-word essay in Nepali about your neighbourhood.",    postedBy:"Meena Shrestha",  postedAt:"2082-01-16" },
@@ -42,7 +41,7 @@ export const mockHomework = [
   { id:"h6", title:"Algebra Problem Set 3",            subject:"Mathematics",  class:"9A",  dueDate:"2082-01-24", priority:"high",   description:"Solve all problems from exercise 3.2.",                        postedBy:"Sunita Koirala",  postedAt:"2082-01-17" },
 ];
 
-// ─── Notices ───────────────────────────────────────────────────────────────────
+// ─── Notices ────
 export const mockNotices = [
   { id:"n1", title:"Annual Sports Day 2082",       category:"event",   content:"Annual Sports Day will be held on Falgun 15, 2082. All students must participate. Sports uniform is mandatory.",                      important:true,  postedBy:"Admin",           postedAt:"2082-01-10" },
   { id:"n2", title:"First Term Exam Schedule",     category:"exam",    content:"First term examinations will commence from Falgun 20, 2082. Detailed timetable has been distributed in classes.",                      important:true,  postedBy:"Admin",           postedAt:"2082-01-12" },
@@ -51,7 +50,7 @@ export const mockNotices = [
   { id:"n5", title:"Fee Submission Reminder",      category:"urgent",  content:"Last date for second installment fee submission is Falgun 25, 2082. Late charges will apply after the due date.",                      important:true,  postedBy:"Admin",           postedAt:"2082-01-16" },
 ];
 
-// ─── Attendance ────────────────────────────────────────────────────────────────
+// ─── Attendance ────
 export const mockAttendance = {
   "s1": {
     "2082-01-01":"present","2082-01-02":"present","2082-01-03":"absent",
@@ -62,7 +61,7 @@ export const mockAttendance = {
   }
 };
 
-// ─── Exam Results ──────────────────────────────────────────────────────────────
+// ─── Exam Results ────
 export const mockExamResults = [
   {
     id:"r1", studentId:"s1", studentName:"Aarav Sharma", class:"10A",
@@ -86,7 +85,7 @@ export const mockExamResults = [
   },
 ];
 
-// ─── Fee Records ───────────────────────────────────────────────────────────────
+// ─── Fee Records ─────
 export const mockFees = [
   { id:"f1", studentId:"s1",  studentName:"Aarav Sharma",    class:"10A", amount:12000, paid:12000, status:"paid",    dueDate:"2082-01-15", paidDate:"2082-01-12", method:"cash"          },
   { id:"f2", studentId:"s2",  studentName:"Priya Thapa",     class:"10A", amount:12000, paid:6000,  status:"partial", dueDate:"2082-01-15", paidDate:"2082-01-10", method:"bank_transfer"  },
@@ -96,7 +95,7 @@ export const mockFees = [
   { id:"f6", studentId:"s6",  studentName:"Anjali Rai",      class:"9B",  amount:10000, paid:10000, status:"paid",    dueDate:"2082-01-20", paidDate:"2082-01-15", method:"cash"          },
 ];
 
-// ─── Messages ──────────────────────────────────────────────────────────────────
+// ─── Messages ────
 export const mockMessages = [
   {
     id:"m1", from:"Rajesh Sharma", fromRole:"parent", to:"Sunita Koirala", toRole:"teacher",
@@ -121,7 +120,7 @@ export const mockMessages = [
   },
 ];
 
-// ─── Class Routine ─────────────────────────────────────────────────────────────
+// ─── Class Routine ─────
 export const mockRoutine = {
   "10A": {
     Monday:    [
@@ -167,9 +166,7 @@ export const mockRoutine = {
   }
 };
 
-// ─── Calendar Events (academic + public holidays) ─────────────────────────────
-// Note: the full Nepal public holidays dataset is managed in CalendarPage.jsx
-// These are the school-specific academic events only
+// Calendar Events 
 export const mockCalendarEvents = [
   { id:"c1",  bsDate:"2082-01-15", title:"School Opens – New Session 2082-83",  type:"event",   description:"Academic year 2082-83 begins. All students report at 6:30 AM." },
   { id:"c2",  bsDate:"2082-01-25", title:"Parent-Teacher Meeting",               type:"meeting", description:"Quarterly PTM for all classes. Parents are requested to attend." },
@@ -192,7 +189,6 @@ export const mockCalendarEvents = [
   { id:"c19", bsDate:"2082-12-28", title:"Annual Result Day",                   type:"event",   description:"Annual exam results published. Promotion list displayed." },
 ];
 
-// ─── Chart data ────────────────────────────────────────────────────────────────
 export const attendanceChartData = [
   { month:"Bhadra",  present:92, absent:8  },
   { month:"Ashwin",  present:88, absent:12 },
@@ -210,6 +206,5 @@ export const enrollmentData = [
   { year:"2082", students:487 },
 ];
 
-// ─── Constants ────────────────────────────────────────────────────────────────
 export const CLASSES  = ["7A","7B","8A","8B","9A","9B","10A","10B"];
 export const SUBJECTS = ["Mathematics","Science","Nepali","English","Social Studies","Computer Science","Health & Physical Education","Optional Mathematics"];

@@ -1,7 +1,5 @@
 # SikshyaSanjal Backend — Single-Tenant School Management System
 
-A clean, production-ready **MERN stack** backend for managing school operations. Single-tenant architecture, role-based access control (Admin, Teacher, Parent), and Bikram Sambat calendar integration.
-
 ---
 
 ## ✨ Features
@@ -15,7 +13,6 @@ A clean, production-ready **MERN stack** backend for managing school operations.
 - **Encrypted Parent-Teacher Messaging**: AES-256-GCM encryption for message content
 - **Secure JWT Authentication**: 7-day token expiry, refresh strategy ready
 - **Data Integrity**: Unique indexes, validators, cascading logic in pre-save hooks
-- **Clean Code**: Refactored controllers, no unnecessary duplication, consistent error handling
 
 ---
 

@@ -21,7 +21,6 @@ export default function BsDatePicker({ value, onChange }) {
     }
   }, [value]);
 
-  // Click outside listener to close popup
   useEffect(() => {
     function handleClickOutside(event) {
       if (containerRef.current && !containerRef.current.contains(event.target)) {
@@ -60,32 +59,24 @@ export default function BsDatePicker({ value, onChange }) {
     setIsOpen(false);
   };
 
-  // Generate calendar grid
   const daysInMonth = getDaysInBSMonth(viewYear, viewMonth);
-  // Get weekday of the 1st of this month
   const firstDayAd = bsToAd(`${viewYear}-${String(viewMonth).padStart(2, "0")}-01`);
   const startDayOfWeek = firstDayAd ? new Date(firstDayAd).getDay() : 0; // 0 = Sunday, 6 = Saturday
 
   const gridCells = [];
-  // Empty cells for weekday offset
   for (let i = 0; i < startDayOfWeek; i++) {
     gridCells.push(null);
   }
-  // Day numbers
   for (let d = 1; d <= daysInMonth; d++) {
     gridCells.push(d);
   }
 
   const YEARS = Array.from({ length: 2088 - 2078 + 1 }, (_, i) => 2078 + i);
   const MONTHS = BS_MONTH_NAMES;
-
-  // Selected date parts to highlight
   let selYear = null, selMonth = null, selDay = null;
   if (value && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
     [selYear, selMonth, selDay] = value.split("-").map(Number);
   }
-
-  // Today parts to highlight
   const todayYear = today.year;
   const todayMonth = today.month;
   const todayDay = today.day;

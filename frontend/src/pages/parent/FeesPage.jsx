@@ -11,7 +11,6 @@ import {
 } from "lucide-react";
 import BsDatePicker from "../../components/BsDatePicker";
 
-// ── Constants ─────────────────────────────────────────────────────────────────
 const STATUSES = ["all", "paid", "partially_paid", "pending", "overdue"];
 const STATUS_LABEL = {
   paid:           "Paid",
@@ -36,12 +35,10 @@ const PAY_METHODS = [
   { value: "other",         label: "Other" },
 ];
 
-// ── Skeleton ──────────────────────────────────────────────────────────────────
 function Skeleton({ height = 16, width = "100%", radius = 6 }) {
   return <div className="skeleton" style={{ height, width, borderRadius: radius }} />;
 }
 
-// ── Escape key hook ───────────────────────────────────────────────────────────
 function useEscapeKey(handler) {
   useEffect(() => {
     const h = (e) => { if (e.key === "Escape") handler(); };
@@ -228,8 +225,6 @@ function AddFeeModal({ classes, onClose, onSaved }) {
 
   const set = (k, v) => {
     let updates = { [k]: v };
-
-    // Academic year is fixed to current year, do not link to admission year
 
     if (k === "dueDate") {
       const bs = adToBs(v);
@@ -431,9 +426,6 @@ function AddFeeModal({ classes, onClose, onSaved }) {
   );
 }
 
-// ════════════════════════════════════════════════════════════════════════════════
-// MAIN PAGE
-// ════════════════════════════════════════════════════════════════════════════════
 export default function FeesPage() {
   const { currentUser } = useApp();
 

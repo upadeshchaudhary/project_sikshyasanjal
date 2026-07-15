@@ -55,7 +55,6 @@ exports.listOfAllTeachers = async (req, res) => {
     if (req.query.isDisabled === "true") {
       filter.isDisabled = true;
     } else if (req.query.isDisabled === "all") {
-      // return both enabled and disabled teachers
     } else {
       filter.isDisabled = false;
     }

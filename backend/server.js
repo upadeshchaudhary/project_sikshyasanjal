@@ -6,8 +6,6 @@ const morgan    = require("morgan");
 const rateLimit = require("express-rate-limit");
 const adminseeder = require("./adminSeeder");
 require("dotenv").config();
-
-// ── Validate required environment variables ───────────────────────────────────
 const REQUIRED_ENV = ["MONGO_URI", "JWT_SECRET", "CLIENT_URL"];
 const missing = REQUIRED_ENV.filter((k) => !process.env[k]);
 if (missing.length > 0) {
@@ -16,8 +14,6 @@ if (missing.length > 0) {
 }
 
 const app = express();
-
-// ── Security ──────────────────────────────────────────────────────────────────
 app.use(
   helmet({
     contentSecurityPolicy: {
@@ -32,8 +28,6 @@ app.use(
     crossOriginEmbedderPolicy: false,
   })
 );
-
-// ── CORS ──────────────────────────────────────────────────────────────────────
 const ALLOWED_ORIGINS = [
   process.env.CLIENT_URL,
   ...(process.env.NODE_ENV !== "production"
@@ -53,13 +47,9 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
-
-// ── Logging & body parsing ────────────────────────────────────────────────────
 app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
 app.use(express.json({ limit: "10kb" }));
 app.use(express.urlencoded({ extended: true, limit: "10kb" }));
-
-// ── Rate limiters ─────────────────────────────────────────────────────────────
 const otpLimiter = rateLimit({
   windowMs: 10 * 60 * 1000,
   max: 20,
@@ -79,8 +69,6 @@ const loginLimiter = rateLimit({
 });
 app.use("/api/auth/login",        loginLimiter);
 app.use("/api/auth/parent/login", loginLimiter);
-
-// ── Routes ────────────────────────────────────────────────────────────────────
 app.use("/api", require("./routes/auth/authRoutes"));
 app.use("/api", require("./routes/dashboard/dashboardRoutes"));
 app.use("/api", require("./routes/students/studentsRoutes"));
@@ -98,16 +86,10 @@ app.use("/api", require("./routes/search/searchRoutes"));
 app.use("/api", require("./routes/settings/settingsRoutes"));
 app.use("/api", require("./routes/enquiry/enquiryRoutes"));
 
-// ── Health check ──────────────────────────────────────────────────────────────
 app.get("/api/health", (_req, res) =>
   res.json({ status: "ok", timestamp: new Date().toISOString(), env: process.env.NODE_ENV || "development" })
 );
-
-// ── 404 ───────────────────────────────────────────────────────────────────────
 app.use((_req, res) => res.status(404).json({ success: false, message: "Route not found" }));
-
-// ── Global error handler ──────────────────────────────────────────────────────
-// eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   const statusCode = err.status || err.statusCode || 500;
   if (process.env.NODE_ENV !== "test") {
@@ -124,8 +106,6 @@ app.use((err, req, res, next) => {
       : err.message,
   });
 });
-
-// ── Database + start ──────────────────────────────────────────────────────────
 mongoose
   .connect(process.env.MONGO_URI, { serverSelectionTimeoutMS: 5000 })
   .then(async () => {

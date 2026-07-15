@@ -15,8 +15,6 @@ const userSchema = new mongoose.Schema(
        required: true,
        enum:     { values: ["admin", "teacher", "parent"], message: "Role must be admin, teacher, or parent" },
      },
-
-    // ── Contact ───────────────────────────────────────────────────────────────
     email: {
       type:      String,
       lowercase: true,
@@ -33,22 +31,15 @@ const userSchema = new mongoose.Schema(
       match:  [/^(98|97|96)\d{8}$/, "Enter a valid Nepali mobile number"],
     },
 
-    // ── Auth ──────────────────────────────────────────────────────────────────
     passwordHash: { type: String, select: false },
     otpHash:      { type: String, select: false },
     otpExpiry:    { type: Date },
-
-    // ── Teacher-specific ──────────────────────────────────────────────────────
     subject:         { type: String, trim: true, default: null },
     assignedClasses: { type: [String], default: [] },
     qualification:   { type: String, trim: true, default: null },
-
-    // ── Parent-specific ───────────────────────────────────────────────────────
     childId:    { type: mongoose.Schema.Types.ObjectId, ref: "Student", default: null },
     childName:  { type: String, default: null },
     childClass: { type: String, default: null },
-
-    // ── Profile ───────────────────────────────────────────────────────────────
     avatar:     { type: String, default: null },
     isDisabled: { type: Boolean, default: false, index: true },
     lastLogin:  { type: Date },
@@ -56,19 +47,14 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// ── Indexes ───────────────────────────────────────────────────────────────────
 userSchema.index({ role: 1 });
 userSchema.index({ role: 1, isDisabled: 1 });
-
-// ── Pre-save: hash password if modified ───────────────────────────────────────
 userSchema.pre("save", async function (next) {
   if (this.isModified("passwordHash") && this.passwordHash && !this.passwordHash.startsWith("$2")) {
     this.passwordHash = await bcrypt.hash(this.passwordHash, 12);
   }
   next();
 });
-
-// ── Instance methods ──────────────────────────────────────────────────────────
 userSchema.methods.verifyPassword = async function (plainPassword) {
   if (!this.passwordHash) return false;
   return bcrypt.compare(plainPassword, this.passwordHash);
@@ -93,7 +79,6 @@ userSchema.methods.verifyOtp = async function (otpPlain) {
   return valid;
 };
 
-// ── toJSON: strip sensitive fields ────────────────────────────────────────────
 userSchema.set("toJSON", {
   transform: (_doc, ret) => {
     delete ret.passwordHash;

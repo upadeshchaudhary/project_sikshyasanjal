@@ -13,4 +13,18 @@ const AcademicCalendar = require("./AcademicCalendarSchema");
 const Complain         = require("./ComplainSchema");
 const Enquiry          = require("./EnquirySchema");
 
-module.exports = { School, User, Student, Homework, Notice, Attendance, ExamResult, FeeRecord, Message, ClassRoutine, AcademicCalendar, Complain, Enquiry };
+module.exports = { 
+    School, 
+    User, 
+    Student, 
+    Homework, 
+    Notice,
+    Attendance, 
+    ExamResult, 
+    FeeRecord, 
+    Message, 
+    ClassRoutine, 
+    AcademicCalendar, 
+    Complain, 
+    Enquiry };
+

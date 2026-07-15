@@ -80,7 +80,7 @@ export default function LoginPage() {
       .then(res => {
         if (res.data.success) setPreSchoolInfo(res.data.school);
       })
-      .catch(() => { /* ignore */ });
+      .catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -358,7 +358,7 @@ function FormStep({
         </div>
       )}
 
-      {/* Staff (Admin/Teacher) Specific Fields */}
+      {/* Staff (Admin/Teacher)*/}
       {!isParent && (
         <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
           <Field label="Email Address" error={errors.email}>

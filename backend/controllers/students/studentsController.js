@@ -139,7 +139,6 @@ exports.createStudent = async (req, res) => {
         let parent = await User.findOne({ phone: parentPhone, role: "parent" });
 
         if (parent) {
-          // Link existing parent to this new student
           parent.childId = student._id;
           parent.childName = student.name;
           parent.childClass = student.class;
@@ -194,9 +193,7 @@ exports.updateStudent = async (req, res) => {
     const student = await Student.findByIdAndUpdate(req.params.id, { $set: updates }, { new: true, runValidators: true });
     if (!student) return res.status(404).json({ success: false, message: "Student not found." });
 
-    // ── Handle Parent Account Sync/Linking ────────────────────────────────────
     if (updates.parentPhone && /^(98|97|96)\d{8}$/.test(updates.parentPhone)) {
-      // If phone changed, find or create new parent account
       let parent = await User.findOne({ phone: updates.parentPhone, role: "parent" });
 
       if (parent) {
@@ -221,7 +218,6 @@ exports.updateStudent = async (req, res) => {
         await student.save();
       }
     } else if (student.parentId && (updates.name || updates.class)) {
-      // If phone didn't change but name/class did, sync with existing parent account
       await User.findByIdAndUpdate(student.parentId, {
         childName: student.name,
         childClass: student.class,
@@ -258,7 +254,6 @@ exports.toggleStudentStatus = async (req, res) => {
     const newStatus = !student.isActive;
     const updated = await Student.findByIdAndUpdate(req.params.id, { $set: { isActive: newStatus } }, { new: true }).lean();
 
-    // Toggle the linked Parent account if it exists
     if (student.parentId) {
       await User.findByIdAndUpdate(student.parentId, { $set: { isDisabled: !newStatus } });
     }

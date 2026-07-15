@@ -1,6 +1,4 @@
 // backend/utils/calendar.js
-// Bikram Sambat (BS) to Gregorian (AD) calendar conversion utility
-// Accurate version synchronized with frontend logic
 
 const BS_MONTH_NAMES = [
   "Baisakh", "Jestha", "Ashadh", "Shrawan",
@@ -24,7 +22,7 @@ const BS_DAYS = {
 };
 
 const BS_EPOCH = { year: 2078, month: 1, day: 1 };
-const AD_EPOCH = new Date(Date.UTC(2021, 3, 14)); // April 14, 2021 (UTC to match backend storage)
+const AD_EPOCH = new Date(Date.UTC(2021, 3, 14));
 
 function getDaysInBsMonth(year, month) {
   if (month < 1 || month > 12) return 30;
@@ -101,7 +99,6 @@ function getCurrentAcademicYear() {
   if (bsDate) {
     return bsDate.split("-")[0];
   }
-  // Fallback calculation in case of invalid date or epoch bounds
   const now = new Date();
   const adYear = now.getFullYear();
   const adMon = now.getMonth() + 1;

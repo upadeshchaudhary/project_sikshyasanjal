@@ -144,8 +144,6 @@ function ProfileTab({ currentUser }) {
   return (
     <>
       <Section title="Personal Information" desc="Your name and contact details visible to other users.">
-
-        {/* Name — locked for parents */}
         <SettingRow
           label="Full Name"
           desc={isParent
@@ -251,7 +249,6 @@ function ProfileTab({ currentUser }) {
   );
 }
 
-// ─── Notifications Tab ────────────────────────────────────────────────────────
 function NotificationsTab({ settings, updateSetting, role }) {
   return (
     <>
@@ -290,7 +287,6 @@ function NotificationsTab({ settings, updateSetting, role }) {
   );
 }
 
-// ─── Academic Tab ─────────────────────────────────────────────────────────────
 function AcademicTab({ settings, updateSetting, role, currentUser }) {
   return (
     <>
@@ -354,7 +350,7 @@ function AcademicTab({ settings, updateSetting, role, currentUser }) {
   );
 }
 
-// ─── Display & Region Tab ─────────────────────────────────────────────────────
+
 function DisplayTab({ settings, updateSetting }) {
   return (
     <>
@@ -405,7 +401,6 @@ function DisplayTab({ settings, updateSetting }) {
   );
 }
 
-// ─── Security Tab ─────────────────────────────────────────────────────────────
 function SecurityTab({ settings, updateSetting, role }) {
   const [changingPwd, setChangingPwd] = useState(false);
   const [pwd, setPwd] = useState({ current: "", next: "", confirm: "" });
@@ -535,7 +530,6 @@ function SecurityTab({ settings, updateSetting, role }) {
   );
 }
 
-// ─── School Config Tab (admin only) ──────────────────────────────────────────
 function SchoolTab({ settings, updateSetting }) {
   const { updateSchool } = useApp();
   const [form, setForm]     = useState({ phone: "", email: "", address: "" });
@@ -688,7 +682,6 @@ function SchoolTab({ settings, updateSetting }) {
   );
 }
 
-// ─── Fee Settings Tab (admin only) ───────────────────────────────────────────
 function FeeTab({ settings, updateSetting }) {
   const paymentMethods = settings.paymentMethods || ["Cash","eSewa","Khalti"];
   const feeCategories = settings.feeCategories || ["Tuition Fee","Exam Fee","Sports Fee","Library Fee","Computer Lab Fee"];
@@ -814,7 +807,6 @@ function FeeTab({ settings, updateSetting }) {
   );
 }
 
-// ─── Main Settings Page ───────────────────────────────────────────────────────
 export default function SettingsPage() {
   const { currentUser, settings, updateSetting, logout } = useApp();
   const navigate    = useNavigate();

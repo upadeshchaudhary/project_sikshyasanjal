@@ -10,7 +10,6 @@ import {
   CheckCheck, Search, Trash2, MoreVertical
 } from "lucide-react";
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
 function Skeleton({ height = 16, width = "100%", radius = 6 }) {
   return <div className="skeleton" style={{ height, width, borderRadius: radius }} />;
 }
@@ -59,7 +58,6 @@ function Field({ label, error, children }) {
   );
 }
 
-// ── Avatar Component ──────────────────────────────────────────────────────────
 function Avatar({ user, size = 40 }) {
     if (!user) return <div className="avatar" style={{ width: size, height: size }}><MessageSquare size={size * 0.5} /></div>;
     const role = user.role || "admin";
@@ -79,7 +77,6 @@ function Avatar({ user, size = 40 }) {
     );
 }
 
-// ── Compose modal ─────────────────────────────────────────────────────────────
 function ComposeModal({ onClose, onSent }) {
   const [contacts, setContacts] = useState([]);
   const [form,     setForm]     = useState({ to: "" });
@@ -145,7 +142,6 @@ function ComposeModal({ onClose, onSent }) {
   );
 }
 
-// ── Bubble Component ──────────────────────────────────────────────────────────
 function Bubble({ msg, isMe, onOpenOptions }) {
   return (
     <div 
@@ -196,9 +192,6 @@ function Bubble({ msg, isMe, onOpenOptions }) {
   );
 }
 
-// ════════════════════════════════════════════════════════════════════════════════
-// MAIN PAGE
-// ════════════════════════════════════════════════════════════════════════════════
 export default function MessagesPage() {
   const { currentUser, fetchUnreadMessagesCount } = useApp();
 
@@ -220,7 +213,6 @@ export default function MessagesPage() {
   const threadEndRef = useRef(null);
   const optionsRef = useRef(null);
 
-  // ── Data Fetching ──────────────────────────────────────────────────────────
   const fetchConversations = useCallback(async () => {
     setLoadingConv(true);
     try {
@@ -256,7 +248,7 @@ export default function MessagesPage() {
     setMessages([]);
     setShowChatMenu(false);
     setShowCompose(false);
-    setSearchQuery(""); // Clear search when opening chat
+    setSearchQuery(""); 
     
     try {
       const res = await axios.get(`/messages/conversation/${targetId}`);
@@ -366,17 +358,14 @@ export default function MessagesPage() {
     return groups;
   }, [messages]);
 
-  // Integrated search logic
   const filteredItems = useMemo(() => {
     const q = searchQuery.toLowerCase().trim();
     if (!q) return conversations.map(c => ({ ...c, type: 'conversation' }));
 
-    // Filter conversations
     const convMatches = conversations
         .filter(c => c.name.toLowerCase().includes(q))
         .map(c => ({ ...c, type: 'conversation' }));
 
-    // Filter contacts that are NOT already in conversations
     const convUserIds = new Set(conversations.map(c => c.userId));
     const contactMatches = contacts
         .filter(c => c.name.toLowerCase().includes(q) && !convUserIds.has(c._id))

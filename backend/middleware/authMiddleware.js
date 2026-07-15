@@ -7,7 +7,6 @@ if (!process.env.JWT_SECRET) {
 }
 const JWT_SECRET = process.env.JWT_SECRET;
 
-// ── protect — verifies JWT and attaches decoded payload to req.user ───────────
 const authMiddleware = (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
@@ -41,7 +40,6 @@ const authMiddleware = (req, res, next) => {
   }
 };
 
-// ── requireRole — role-based access control gate ─────────────────────────────
 const requireRole = (...roles) => (req, res, next) => {
   if (!req.user) {
     return res.status(401).json({ success: false, message: "Authentication required." });
