@@ -77,7 +77,7 @@ const ROLE_LABELS = {
 
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function Sidebar() {
-  const { currentUser, school, logout, unreadCount, settings, updateSetting, mobileOpen, setMobileOpen } = useApp();
+  const { currentUser, school, logout, unreadCount, unreadMessagesCount, settings, updateSetting, mobileOpen, setMobileOpen } = useApp();
   const navigate  = useNavigate();
   const location  = useLocation();
   const [logoutConfirm, setLogoutConfirm] = useState(false);
@@ -204,9 +204,12 @@ export default function Sidebar() {
                   {!isCollapsed && (
                     <>
                       <span style={{ flex: 1 }}>{item.label}</span>
-                      {item.badge && unreadCount > 0 && (
+                      {item.badge && (item.path === "/messages" ? unreadMessagesCount : unreadCount) > 0 && (
                         <span style={badgeStyle}>
-                          {unreadCount > 99 ? "99+" : unreadCount}
+                          {item.path === "/messages"
+                            ? (unreadMessagesCount > 99 ? "99+" : unreadMessagesCount)
+                            : (unreadCount > 99 ? "99+" : unreadCount)
+                          }
                         </span>
                       )}
                     </>

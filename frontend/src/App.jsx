@@ -1,4 +1,4 @@
-// App.jsx - Main application component with routing, role-based access control, and auth-aware shell.
+// App.jsx
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { useApp } from "./context/AppContext";
@@ -19,9 +19,6 @@ import "./index.css";
 import LoginPage from "./pages/Common/LoginPage";
 import LandingPage from "./pages/Common/LandingPage";
 
-// ─── Role-based route guard ───────────────────────────────────────────────────
-// allowedRoles: array of roles that can access this route
-// If user's role is not in allowedRoles → redirect to /dashboard
 function RoleGuard({ allowedRoles, children }) {
   const { currentUser } = useApp();
   if (!allowedRoles.includes(currentUser?.role)) {
@@ -30,12 +27,9 @@ function RoleGuard({ allowedRoles, children }) {
   return children;
 }
 
-// ─── Auth-aware shell ─────────────────────────────────────────────────────────
 function AppShell() {
   const { currentUser, authLoading } = useApp();
 
-  // While auth context is initialising (reading token from localStorage + validating),
-  // render nothing — prevents the login-flash flicker bug.
   if (authLoading) {
     return (
       <div className="auth-loading-screen">

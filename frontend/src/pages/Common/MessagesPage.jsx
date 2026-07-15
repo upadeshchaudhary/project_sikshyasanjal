@@ -200,7 +200,7 @@ function Bubble({ msg, isMe, onOpenOptions }) {
 // MAIN PAGE
 // ════════════════════════════════════════════════════════════════════════════════
 export default function MessagesPage() {
-  const { currentUser } = useApp();
+  const { currentUser, fetchUnreadMessagesCount } = useApp();
 
   const [conversations, setConversations] = useState([]);
   const [contacts,      setContacts]      = useState([]);
@@ -266,6 +266,9 @@ export default function MessagesPage() {
       setConversations(prev => prev.map(c => 
         (c.userId === targetId) ? { ...c, unread: 0 } : c
       ));
+      if (fetchUnreadMessagesCount) {
+        fetchUnreadMessagesCount();
+      }
     } catch {
       toast.error("Failed to load chat.");
     } finally {
@@ -318,6 +321,9 @@ export default function MessagesPage() {
       setSelectedUser(null);
       setMessages([]);
       toast.success("Chat deleted.");
+      if (fetchUnreadMessagesCount) {
+        fetchUnreadMessagesCount();
+      }
     } catch {
       toast.error("Failed to delete chat.");
     }

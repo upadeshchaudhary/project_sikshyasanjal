@@ -118,14 +118,8 @@ function clearStorage() {
 export const AppProvider = ({ children }) => {
   const [currentUser,   setCurrentUser]   = useState(null);
   const [school,        setSchool]        = useState(null);
-  const [notifications, setNotifications] = useState(() => {
-    try {
-      const saved = localStorage.getItem("ss_notifications");
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
+  const [notifications, setNotifications] = useState([]);
+  const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
   const [settings,      setSettings]      = useState(DEFAULT_SETTINGS);
   const [authLoading,   setAuthLoading]   = useState(true);
   const [offline,       setOffline]       = useState(false);
@@ -194,14 +188,204 @@ export const AppProvider = ({ children }) => {
     return () => { cancelled = true; };
   }, []);
 
+  // Load notifications when user changes
   useEffect(() => {
-    localStorage.setItem("ss_notifications", JSON.stringify(notifications));
-  }, [notifications]);
+    if (!currentUser) {
+      setNotifications([]);
+      return;
+    }
+    const key = `ss_notifications_${currentUser._id || currentUser.id}`;
+    const saved = localStorage.getItem(key);
+    if (saved !== null) {
+      try {
+        setNotifications(JSON.parse(saved));
+      } catch (e) {
+        setNotifications(getSeedNotifications(currentUser));
+      }
+    } else {
+      const seeded = getSeedNotifications(currentUser);
+      setNotifications(seeded);
+      localStorage.setItem(key, JSON.stringify(seeded));
+    }
+  }, [currentUser]);
+
+  // Save notifications when they change
+  useEffect(() => {
+    if (!currentUser) return;
+    const key = `ss_notifications_${currentUser._id || currentUser.id}`;
+    localStorage.setItem(key, JSON.stringify(notifications));
+  }, [notifications, currentUser]);
+
+  const getDismissedIds = useCallback(() => {
+    if (!currentUserRef.current) return [];
+    const key = `ss_dismissed_${currentUserRef.current._id || currentUserRef.current.id}`;
+    try {
+      const saved = localStorage.getItem(key);
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  }, []);
+
+  const pollRealtimeUpdates = useCallback(async () => {
+    if (!currentUserRef.current) return;
+    const dismissedIds = getDismissedIds();
+
+    // 1. Fetch conversations for messages
+    try {
+      const { data: convData } = await axios.get("/messages/conversations");
+      if (convData.success && convData.conversations) {
+        let totalUnread = 0;
+        let newNotifs = [];
+        let updatedSome = false;
+
+        setNotifications(prevNotifs => {
+          let updatedList = [...prevNotifs];
+
+          convData.conversations.forEach(conv => {
+            totalUnread += conv.unread || 0;
+
+            if (conv.unread > 0 && settings.notifyMessages) {
+              const notifId = `msg_${conv.userId}_${new Date(conv.timestamp).getTime()}`;
+              // Check if we already have this notification or dismissed it
+              const exists = updatedList.some(n => n.id === notifId) || dismissedIds.includes(notifId);
+              if (!exists) {
+                const newNotif = {
+                  id: notifId,
+                  type: "message",
+                  title: `New message from ${conv.name}`,
+                  body: conv.lastMessage || "A parent or teacher sent a new message.",
+                  time: "Just now",
+                  read: false,
+                  link: "/messages",
+                };
+                updatedList = [newNotif, ...updatedList];
+                newNotifs.push(newNotif);
+                updatedSome = true;
+              }
+            } else if (conv.unread === 0) {
+              // Auto-mark read
+              const prefix = `msg_${conv.userId}_`;
+              const hasUnreadNotif = updatedList.some(n => n.id.startsWith(prefix) && !n.read);
+              if (hasUnreadNotif) {
+                updatedList = updatedList.map(n => 
+                  n.id.startsWith(prefix) ? { ...n, read: true } : n
+                );
+                updatedSome = true;
+              }
+            }
+          });
+
+          // Trigger toast for new notifications
+          newNotifs.forEach(notif => {
+            toast.success(notif.title, { id: notif.id, duration: 4000 });
+          });
+
+          return updatedSome ? updatedList : prevNotifs;
+        });
+
+        setUnreadMessagesCount(totalUnread);
+      }
+    } catch (err) {
+      console.warn("Failed polling conversations:", err.message);
+    }
+
+    // 2. Fetch notices
+    try {
+      if (settings.notifyNotices) {
+        const { data: noticeData } = await axios.get("/notices?limit=5");
+        if (noticeData.success && noticeData.notices) {
+          setNotifications(prevNotifs => {
+            let updatedList = [...prevNotifs];
+            let updatedSome = false;
+            let newNotifs = [];
+
+            noticeData.notices.forEach(notice => {
+              const notifId = `notice_${notice._id}`;
+              const exists = updatedList.some(n => n.id === notifId) || dismissedIds.includes(notifId);
+              if (!exists) {
+                const newNotif = {
+                  id: notifId,
+                  type: "notice",
+                  title: `New notice posted`,
+                  body: notice.title || "The latest school notice is ready to review.",
+                  time: new Date(notice.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                  read: false,
+                  link: "/notices",
+                };
+                updatedList = [newNotif, ...updatedList];
+                newNotifs.push(newNotif);
+                updatedSome = true;
+              }
+            });
+
+            newNotifs.forEach(notif => {
+              toast.success(`New notice: ${notif.body}`, { id: notif.id, duration: 4000 });
+            });
+
+            return updatedSome ? updatedList : prevNotifs;
+          });
+        }
+      }
+    } catch (err) {
+      console.warn("Failed polling notices:", err.message);
+    }
+
+    // 3. Fetch homework
+    try {
+      if (settings.notifyHomework) {
+        const { data: hwData } = await axios.get("/homework?limit=5");
+        if (hwData.success && hwData.homework) {
+          setNotifications(prevNotifs => {
+            let updatedList = [...prevNotifs];
+            let updatedSome = false;
+            let newNotifs = [];
+
+            hwData.homework.forEach(hw => {
+              const notifId = `hw_${hw._id}`;
+              const exists = updatedList.some(n => n.id === notifId) || dismissedIds.includes(notifId);
+              if (!exists) {
+                const newNotif = {
+                  id: notifId,
+                  type: "homework",
+                  title: `New homework assigned`,
+                  body: `${hw.subject}: ${hw.title}`,
+                  time: new Date(hw.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                  read: false,
+                  link: "/homework",
+                };
+                updatedList = [newNotif, ...updatedList];
+                newNotifs.push(newNotif);
+                updatedSome = true;
+              }
+            });
+
+            newNotifs.forEach(notif => {
+              toast.success(notif.body, { id: notif.id, duration: 4000 });
+            });
+
+            return updatedSome ? updatedList : prevNotifs;
+          });
+        }
+      }
+    } catch (err) {
+      console.warn("Failed polling homework:", err.message);
+    }
+  }, [settings.notifyMessages, settings.notifyNotices, settings.notifyHomework, getDismissedIds]);
+
+  const fetchUnreadMessagesCount = useCallback(() => {
+    pollRealtimeUpdates();
+  }, [pollRealtimeUpdates]);
 
   useEffect(() => {
-    if (!currentUser || notifications.length > 0) return;
-    setNotifications(getSeedNotifications(currentUser));
-  }, [currentUser, notifications.length]);
+    if (currentUser) {
+      pollRealtimeUpdates();
+      const interval = setInterval(pollRealtimeUpdates, 8000);
+      return () => clearInterval(interval);
+    } else {
+      setUnreadMessagesCount(0);
+    }
+  }, [currentUser, pollRealtimeUpdates]);
 
   useEffect(() => {
     const interceptor = axios.interceptors.response.use(
@@ -269,8 +453,21 @@ export const AppProvider = ({ children }) => {
     setNotifications(p => p.map(n => n.id === id ? { ...n, read: true } : n)), []);
   const markAllRead     = useCallback(() =>
     setNotifications(p => p.map(n => ({ ...n, read: true }))), []);
-  const clearNotif      = useCallback((id) =>
-    setNotifications(p => p.filter(n => n.id !== id)), []);
+  const clearNotif = useCallback((id) => {
+    setNotifications(p => p.filter(n => n.id !== id));
+    if (currentUserRef.current) {
+      const key = `ss_dismissed_${currentUserRef.current._id || currentUserRef.current.id}`;
+      try {
+        const saved = localStorage.getItem(key);
+        const dismissed = saved ? JSON.parse(saved) : [];
+        if (!dismissed.includes(id)) {
+          localStorage.setItem(key, JSON.stringify([...dismissed, id]));
+        }
+      } catch (e) {
+        console.warn("Failed to store dismissed notification ID:", e);
+      }
+    }
+  }, []);
   const addNotification = useCallback((notif) =>
     setNotifications(p => [notif, ...p]), []);
   const unreadCount = notifications.filter(n => !n.read).length;
@@ -296,6 +493,7 @@ export const AppProvider = ({ children }) => {
       login, logout: handleLogout, updateUser, updateSchool,
       notifications, markNotifRead, markAllRead,
       clearNotif, addNotification, unreadCount,
+      unreadMessagesCount, fetchUnreadMessagesCount,
       settings, updateSetting,
       mobileOpen, setMobileOpen,
     }}>
